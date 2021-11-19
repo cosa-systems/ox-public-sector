@@ -15,9 +15,15 @@ The token Exchange Mailauth allows secondary accounts to use `access_tokens` for
 
 The plugin is able to request either an `access_token` or an `access_token` and `refresh_token`. As this is only a request, the keycloak server can decide to only return an  `access_token`, even though both are requested.
 
-Logouts are supported with the [keycloak#post-logout](https://github.com/keycloak/keycloak-documentation/blob/master/securing_apps/topics/oidc/java/logout.adoc) handling. Only enabled, when `com.openexchange.mailauth.impersonate.tokenLogoutEndpoint` is configured. Will only work for `refresh_tokens`, as `access_tokens` are not supported by keycloak for logout.
+Logouts are supported with the [keycloak#post-logout](https://github.com/keycloak/keycloak-documentation/blob/master/securing_apps/topics/oidc/java/logout.adoc) handling. Only enabled, when following setting is configured:
 
-If no user `access_tokens` are present or the users should not be allowed to impersonate, an admin can be configured which will be kept active in a dedicated cache. This admin will use its `access_tokens` to call the `token_exchange` for the requested users. 
+```text
+com.openexchange.mailauth.impersonate.tokenLogoutEndpoint
+```
+
+It will only work for `refresh_tokens`, as `access_tokens` are not supported by keycloak for logout.
+
+If no user `access_tokens` are present or the users should not be allowed to impersonate, an admin can be configured which will be kept active in a dedicated cache. This admin will use its `access_tokens` to call the `token_exchange` for the requested users.
 
 ## Configuration
 
