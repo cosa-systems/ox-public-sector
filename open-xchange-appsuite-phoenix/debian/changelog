@@ -1,0 +1,5 @@
+open-xchange-appsuite-phoenix (@GITVERSION@) stable; urgency=low
+
+  * @GITTAGANNOTATION@
+
+ -- @GITTAGAUTHOR@  @GITTAGANNOTATIONTIME@

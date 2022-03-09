@@ -1,0 +1,22 @@
+Source: open-xchange-appsuite-phoenix
+Section: non-free/web
+Priority: optional
+Maintainer: "Viktor Pracht" <viktor.pracht@open-xchange.com>
+Build-Depends: debhelper (>= 8.0.0), lsb-release, cdbs (>= 0.4.53),
+ ant (>= 1.7.0), ant-optional (>= 1.7.0),
+ openjdk-8-jdk-headless | adoptopenjdk-8-hotspot, nodejs (>= 10.0)
+Standards-Version: 3.9.8
+
+Package: open-xchange-appsuite-phoenix
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-manifest (>= @OXVERSION@),
+ open-xchange-appsuite-manifest (<< @NEXTMINOR@)
+Description: Phoenix logo for OX App Suite
+
+Package: open-xchange-appsuite-phoenix-static
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite (>= @OXVERSION@),
+ open-xchange-appsuite (<< @NEXTMINOR@)
+Description: Phoenix logo for OX App Suite
+ .
+ This package contains the static files for the theme.

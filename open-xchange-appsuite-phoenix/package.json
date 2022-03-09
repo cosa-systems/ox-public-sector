@@ -1,0 +1,45 @@
+{
+  "name": "open-xchange-appsuite-phoenix",
+  "license": "CC-BY-NC-SA-3.0",
+  "version": "7.10.6",
+  "description": "Project Phoenix theme for OX App Suite",
+  "scripts": {
+    "e2e": "codeceptjs run",
+    "screenshots": "codeceptjs run -c codecept.screenshots.conf.js",
+    "msgmerge": "for i in i18n/*.po; do msgmerge -Us --previous --backup=none \"$i\" i18n/ox.pot; done"
+  },
+  "dependencies": {},
+  "optionalDependencies": {
+    "@open-xchange/shared-grunt-config": "^0.15.0-pre5",
+    "assemble-less": "^0.7.0",
+    "eslint": "^7.0.0",
+    "eslint-config-open-xchange-appsuite": "^0.4.0",
+    "eslint-plugin-json": "^1.4.0",
+    "eslint-plugin-requirejs": "^3.2.0",
+    "grunt": "1.0.2",
+    "grunt-bump": "0.8.0",
+    "grunt-check-dependencies": "0.12.0",
+    "grunt-contrib-clean": "2.0.0",
+    "grunt-contrib-concat": "1.0.1",
+    "grunt-contrib-copy": "1.0.0",
+    "grunt-contrib-uglify": "3.0.1",
+    "grunt-eslint": "23.0.0",
+    "grunt-jsonlint": "^1.0.1",
+    "grunt-newer": "1.3.0",
+    "grunt-require-gettext": "^0.8.0",
+    "mkdirp": "0.5.3",
+    "rimraf": "2.6.3",
+    "underscore": "^1.8.0"
+  },
+  "devDependencies": {
+    "@open-xchange/appserver": "^0.8.0-pre10",
+    "@open-xchange/codecept-helper": "^0.5.5",
+    "chai": "^4.2.0",
+    "codeceptjs": "^2.6.11",
+    "dotenv": "^10.0.0",
+    "eslint-plugin-codeceptjs": "^1.3.0",
+    "grunt-contrib-connect": "^2.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "puppeteer": "^5.5.0"
+  }
+}
