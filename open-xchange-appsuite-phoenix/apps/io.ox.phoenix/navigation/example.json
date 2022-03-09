@@ -1,0 +1,18 @@
+{
+  "categories": [
+    {
+      "identifier": "technical_groupname1",
+      "display_name": "First Group",
+      "entries": [
+        {
+          "identifier": "technical_membername1",
+          "icon_url": "https://somewhere.dphoenixsuite.de/images/membername1.svg",
+          "display_name": "First Entry",
+          "link": "https://somewhere.dphoenixsuite.de/dataprivacy/",
+          "description": "More details about this category entry",
+          "keywords": "Search Keywords for the category entry"
+        }
+      ]
+    }
+  ]
+}

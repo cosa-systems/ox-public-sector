@@ -41,5 +41,11 @@
     "grunt-contrib-connect": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "puppeteer": "^5.5.0"
+  },
+  "resolutions": {
+    "lodash": "^4.17.21"
+  },
+  "overrides": {
+    "lodash": "^4.17.21"
   }
 }
