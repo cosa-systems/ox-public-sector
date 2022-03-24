@@ -1,0 +1,52 @@
+{
+  "categories": [
+    {
+      "identifier": "ox",
+      "display_name": "Groupware",
+      "entries": [
+        {
+          "identifier": "io.ox/mail",
+          "icon_url": "apps/io.ox.public-sector/navigation/example/mail.svg",
+          "display_name": "Mail",
+          "link": "/appsuite?app=io.ox/mail"
+        },
+        {
+          "identifier": "io.ox/calendar",
+          "icon_url": "apps/io.ox.public-sector/navigation/example/calendar.svg",
+          "display_name": "Calendar",
+          "link": "/appsuite?app=io.ox/calendar"
+        },
+        {
+          "identifier": "io.ox/contacts",
+          "icon_url": "apps/io.ox.public-sector/navigation/example/contacts.svg",
+          "display_name": "Address Book",
+          "link": "/appsuite?app=io.ox/contacts"
+        },
+        {
+          "identifier": "io.ox/portal",
+          "icon_url": "apps/io.ox.public-sector/navigation/example/portal.svg",
+          "display_name": "Portal",
+          "link": "/appsuite?app=io.ox/portal"
+        },
+        {
+          "identifier": "io.ox/tasks",
+          "icon_url": "apps/io.ox.public-sector/navigation/example/tasks.svg",
+          "display_name": "Tasks",
+          "link": "/appsuite?app=io.ox/tasks"
+        }
+      ]
+    },
+    {
+      "identifier": "nextcloud",
+      "display_name": "Nextcloud",
+      "entries": [
+        {
+          "identifier": "files",
+          "icon_url": "apps/io.ox.public-sector/navigation/example/files.svg",
+          "display_name": "Files",
+          "link": "/nextcloud/apps/files/"
+        }
+      ]
+    }
+  ]
+}

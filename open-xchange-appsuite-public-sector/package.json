@@ -1,9 +1,10 @@
 {
-  "name": "open-xchange-appsuite-phoenix",
+  "name": "open-xchange-appsuite-public-sector",
   "license": "CC-BY-NC-SA-3.0",
   "version": "7.10.6",
-  "description": "Project Phoenix theme for OX App Suite",
+  "description": "UI customizations for the public sector",
   "scripts": {
+    "build": "true",
     "e2e": "codeceptjs run",
     "screenshots": "codeceptjs run -c codecept.screenshots.conf.js",
     "msgmerge": "for i in i18n/*.po; do msgmerge -Us --previous --backup=none \"$i\" i18n/ox.pot; done"

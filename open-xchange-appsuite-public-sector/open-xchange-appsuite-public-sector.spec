@@ -1,4 +1,4 @@
-Name:           open-xchange-appsuite-phoenix
+Name:           open-xchange-appsuite-public-sector
 Version:        @OXVERSION@
 %define         ox_release 0
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
@@ -7,7 +7,7 @@ Vendor:         Open-Xchange
 URL:            http://open-xchange.com
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
 License:        AGPLv3+
-Summary:        Phoenix logo for OX App Suite
+Summary:        UI customizations for the public sector
 Autoreqprov:    no
 Source:         %{name}_%{version}.orig.tar.bz2
 
@@ -29,7 +29,7 @@ BuildRequires:  java-1.8.0-openjdk-devel
 Requires(post): open-xchange-appsuite-manifest >= @OXVERSION@, open-xchange-appsuite-manifest < @NEXTMINOR@
 
 %description
-Phoenix logo for OX App Suite
+UI customizations for the public sector
 
 %if 0%{?rhel_version} || 0%{?fedora_version}
 %define docroot /var/www/html/
@@ -39,14 +39,14 @@ Phoenix logo for OX App Suite
 
 %package        static
 Group:          Applications/Productivity
-Summary:        Phoenix logo for OX App Suite
+Summary:        UI customizations for the public sector
 Autoreqprov:    no
 Requires:       open-xchange-appsuite >= @OXVERSION@, open-xchange-appsuite < @NEXTMINOR@
 
 %description    static
-Phoenix logo for OX App Suite
+UI customizations for the public sector
 
-This package contains the static files for the theme.
+This package contains the static files.
 
 %prep
 
