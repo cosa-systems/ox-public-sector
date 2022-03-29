@@ -92,21 +92,25 @@ define('io.ox.public-sector/navigation/register', [
         );
     }
 
+    ext.point('io.ox/core/appcontrol').replace({
+        id: 'left',
+        draw: function () {
+            var taskbar = $('<ul class="taskbar list-unstyled" role="toolbar">');
+            this.append($('<div id="io-ox-topleftbar">').append(taskbar));
+            ext.point('io.ox/core/appcontrol/left').invoke('draw', taskbar);
+        }
+    });
+
     ext.point('io.ox/core/appcontrol/left').replace({
         id: 'launcher',
-        draw: function () { if (!_.device('smartphone')) addLauncher(this); }
+        draw: function () {
+            new LaunchersView({
+                collection: ox.ui.apps,
+                dontProcessOnMobile: true,
+                margin: 12
+            }).render().$el.appendTo(this);
+        }
     });
 
-    ext.point('io.ox/core/appcontrol/right').replace({
-        id: 'launcher',
-        draw: function () { if (_.device('smartphone')) addLauncher(this); }
-    });
-
-    function addLauncher(parent) {
-        new LaunchersView({
-            collection: ox.ui.apps,
-            dontProcessOnMobile: true,
-            margin: 12
-        }).render().$el.appendTo(parent);
-    }
+    ext.point('io.ox/core/appcontrol/right').disable('launcher');
 });
