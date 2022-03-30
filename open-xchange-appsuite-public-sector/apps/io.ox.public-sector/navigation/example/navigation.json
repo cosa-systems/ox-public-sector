@@ -1,52 +1,127 @@
 {
   "categories": [
     {
-      "identifier": "ox",
-      "display_name": "Groupware",
+      "identifier": "ux_fileshare",
+      "display_name": "Dateien",
       "entries": [
         {
-          "identifier": "io.ox/mail",
-          "icon_url": "apps/io.ox.public-sector/navigation/example/mail.svg",
-          "display_name": "Mail",
-          "link": "/appsuite?app=io.ox/mail"
+          "identifier": "fs_files",
+          "tabname": "tab_fileshare",
+          "icon_url": "https://portal.dpx-ox2.at-univention.de/univention/portal/icons/entries/fs_files.svg",
+          "display_name": "Dateien",
+          "link": "https://fs.dpx-demo.dpx-demo.at-univention.de/apps/files",
+          "description": "",
+          "keywords": ""
         },
         {
-          "identifier": "io.ox/calendar",
-          "icon_url": "apps/io.ox.public-sector/navigation/example/calendar.svg",
-          "display_name": "Calendar",
-          "link": "/appsuite?app=io.ox/calendar"
+          "identifier": "fs_photos",
+          "tabname": "tab_fileshare",
+          "icon_url": "https://portal.dpx-ox2.at-univention.de/univention/portal/icons/entries/fs_photos.svg",
+          "display_name": "Bilder",
+          "link": "https://fs.dpx-demo.dpx-demo.at-univention.de/apps/photos",
+          "description": "",
+          "keywords": ""
         },
         {
-          "identifier": "io.ox/contacts",
-          "icon_url": "apps/io.ox.public-sector/navigation/example/contacts.svg",
-          "display_name": "Address Book",
-          "link": "/appsuite?app=io.ox/contacts"
+          "identifier": "fs_contacts",
+          "tabname": "tab_fileshare",
+          "icon_url": "https://portal.dpx-ox2.at-univention.de/univention/portal/icons/entries/fs_contacts.svg",
+          "display_name": "Kontakte",
+          "link": "https://fs.dpx-demo.dpx-demo.at-univention.de/apps/contacts",
+          "description": "",
+          "keywords": ""
         },
         {
-          "identifier": "io.ox/portal",
-          "icon_url": "apps/io.ox.public-sector/navigation/example/portal.svg",
-          "display_name": "Portal",
-          "link": "/appsuite?app=io.ox/portal"
-        },
-        {
-          "identifier": "io.ox/tasks",
-          "icon_url": "apps/io.ox.public-sector/navigation/example/tasks.svg",
-          "display_name": "Tasks",
-          "link": "/appsuite?app=io.ox/tasks"
+          "identifier": "fs_activity",
+          "tabname": "tab_fileshare",
+          "icon_url": "https://portal.dpx-ox2.at-univention.de/univention/portal/icons/entries/fs_activity.svg",
+          "display_name": "Aktivitäten",
+          "link": "https://fs.dpx-demo.dpx-demo.at-univention.de/apps/activity",
+          "description": "",
+          "keywords": ""
         }
       ]
     },
     {
-      "identifier": "nextcloud",
-      "display_name": "Nextcloud",
+      "identifier": "ux_groupware",
+      "display_name": "Groupware",
       "entries": [
         {
-          "identifier": "files",
-          "icon_url": "apps/io.ox.public-sector/navigation/example/files.svg",
-          "display_name": "Files",
-          "link": "/nextcloud/apps/files/"
+          "identifier": "gw_mail",
+          "tabname": "tab_groupware",
+          "icon_url": "https://portal.dpx-ox2.at-univention.de/univention/portal/icons/entries/gw_mail.svg",
+          "display_name": "E-Mails",
+          "link": "https://webmail.dpx-demo.at-univention.de/appsuite?app=io.ox/mail",
+          "description": "",
+          "keywords": ""
+        },
+        {
+          "identifier": "gw_calendar",
+          "tabname": "tab_groupware",
+          "icon_url": "https://portal.dpx-ox2.at-univention.de/univention/portal/icons/entries/gw_calendar.svg",
+          "display_name": "Kalender",
+          "link": "https://webmail.dpx-demo.at-univention.de/appsuite?app=io.ox/calendar",
+          "description": "",
+          "keywords": ""
+        },
+        {
+          "identifier": "gw_contacts",
+          "tabname": "tab_groupware",
+          "icon_url": "https://portal.dpx-ox2.at-univention.de/univention/portal/icons/entries/gw_contacts.svg",
+          "display_name": "Kontakte",
+          "link": "https://webmail.dpx-demo.at-univention.de/appsuite?app=io.ox/contacts",
+          "description": "",
+          "keywords": ""
+        },
+        {
+          "identifier": "gw_tasks",
+          "tabname": "tab_groupware",
+          "icon_url": "https://portal.dpx-ox2.at-univention.de/univention/portal/icons/entries/gw_tasks.svg",
+          "display_name": "Aufgaben",
+          "link": "https://webmail.dpx-demo.at-univention.de/appsuite?app=io.ox/tasks",
+          "description": "",
+          "keywords": ""
         }
+      ]
+    },		
+    {
+      "identifier": "collaboration",
+      "display_name": "Kollaboration",
+      "entries": [
+        {
+          "identifier": "px.Videokonferenzen",
+          "tabname": "px.Videokonferenzen",
+          "icon_url": "https://portal.dpx-ox2.at-univention.de/univention/portal/icons/entries/dpx-ox2.Videokonferenzen.svg",
+          "display_name": "Videokonferenzen",
+          "link": "https://ucc.dpx-demo.at-univention.de/",
+          "description": "Videokonferenzen Beschreibung",
+          "keywords": "Videokonferenzen Keyword Element Matrix Jitsi Synapse Telefon Whiteboard"
+        }
+      ]
+    },
+    {
+      "identifier": "help",
+      "display_name": "Hilfe",
+      "entries": [
+        {
+          "identifier": "ucs.changepassword",
+          "tabname": "ucs.changepassword",
+          "icon_url": "https://portal.dpx-ox2.at-univention.de/univention/portal/icons/entries/Password.svg",
+          "display_name": "Password ändern",
+          "link": "https://portal.dpx-demo.at-univention.de/univention/self-service/#page=passwordchange",
+          "description": "",
+          "keywords": ""
+        },
+        {
+          "identifier": "ext.documentation",
+          "tabname": "ext.documentation",
+          "icon_url": "https://portal.dpx-ox2.at-univention.de/univention/portal/icons/entries/Werkstatt.svg",
+          "display_name": "Dokumentation",
+          "link": "https://www.phoenix-werkstatt.de/downloads-stack/",
+          "description": "",
+          "keywords": ""
+        }			
       ]
     }
   ]
-}
+}  

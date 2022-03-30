@@ -13,30 +13,24 @@ define('io.ox.public-sector/navigation/register', [
     if (!URL) return;
 
     var config = $.ajax(URL + '?lang=' + ox.language, { dataType: 'json' }),
-        OXCategory = settings.get('navigation/oxcategory', 'ox');
+        oxTab = settings.get('navigation/oxtabname', 'ox');
+
+    function getApp(link) {
+        var match = /\bapp=([\w./-]+)/.exec(link);
+        return match && match[1];
+    }
 
     config.then(function (config) {
 
         // Override app icons
         _.each(config.categories, function (category) {
-            if (category.identifier !== OXCategory) return;
             _.each(category.entries, function (entry) {
-                ox.ui.appIcons[entry.identifier] =
+                if (entry.tabname !== oxTab) return;
+                ox.ui.appIcons[getApp(entry.link)] =
                     '<img src="' + encodeURI(entry.icon_url) + '">';
             });
         });
         ext.point('io.ox/core/main/icons').get('mapping').run();
-    });
-
-    var LauncherView = appcontrol.LauncherView.extend({
-        attributes: function () {
-            return {
-                href: this.model.get('link'),
-                target: this.model.get('identifier'),
-                role: 'menuitem',
-                tabindex: -1
-            };
-        }
     });
 
     var LaunchersView = appcontrol.LaunchersView.extend({
@@ -55,31 +49,35 @@ define('io.ox.public-sector/navigation/register', [
                 // Add compose apps
                 self.divider();
                 closable.forEach(function (model) {
-                    self.append(
-                        new LauncherView({ model: model }).render().$el
-                    );
+                    self.append(new appcontrol.LauncherView({
+                        model: model
+                    }).render().$el);
                 });
+            }, function () {
+                appcontrol.LaunchersView.prototype.update.call(self);
             });
         }
     });
 
     function createCategory(category) {
         this.group(category.display_name);
-        var makeApp = category.identifier === OXCategory ? ownApp : foreignApp;
-        _.each(category.entries, makeApp, this);
+        _.each(category.entries, function (entry) {
+            var makeApp = entry.tabname === oxTab ? ownApp : foreignApp;
+            this.append(makeApp(entry), { group: true });
+        }, this);
     }
 
     function ownApp(entry) {
-        this.append(new LauncherView({
-            model: ox.ui.apps.get(entry.identifier)
-        }).render().$el, { group: true });
+        return new appcontrol.LauncherView({
+            model: ox.ui.apps.get(getApp(entry.link))
+        }).render().$el;
     }
 
     function foreignApp(entry) {
-        this.append(
-            $('<a tabindex="-1" role="menuitem" class="btn btn-link lcell">').attr({
+        return $('<a tabindex="-1" role="menuitem" class="btn btn-link lcell">')
+            .attr({
                 href: entry.link,
-                target: entry.target || entry.identifier
+                target: entry.tabname
             }).append(
                 $('<div class="lcell">').append(
                     $('<div class="icon">').append(
@@ -87,9 +85,7 @@ define('io.ox.public-sector/navigation/register', [
                     ),
                     $('<div class="title">').text(entry.display_name)
                 )
-            ),
-            { group: true }
-        );
+            );
     }
 
     ext.point('io.ox/core/appcontrol').replace({
