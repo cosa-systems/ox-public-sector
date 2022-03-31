@@ -13,6 +13,7 @@ define('io.ox.public-sector/navigation/register', [
     if (!URL) return;
 
     var config = $.ajax(URL + '?lang=' + ox.language, { dataType: 'json' }),
+        images = settings.get('navigation/color', true),
         oxTab = settings.get('navigation/oxtabname', 'ox');
 
     function getApp(link) {
@@ -20,20 +21,42 @@ define('io.ox.public-sector/navigation/register', [
         return match && match[1];
     }
 
+    function icon(url, launcher) {
+        if (images && !launcher) {
+            return '<img class="public-sector-launcher" src="'
+                + encodeURI(url) + '" style="background: none">';
+        }
+
+        var mask = "url('" + encodeURI(url) + "') center" +
+            (launcher ? '' : '/ contain');
+        return '<span class="public-sector-launcher" style="mask: ' + mask +
+            '; -webkit-mask: ' + mask + ';">';
+    }
+
+    // Override launcher icon
+    ox.ui.appIcons.launcher = icon('apps/io.ox.public-sector/navigation/launcher.svg', true);
+
     config.then(function (config) {
 
         // Override app icons
         _.each(config.categories, function (category) {
             _.each(category.entries, function (entry) {
                 if (entry.tabname !== oxTab) return;
-                ox.ui.appIcons[getApp(entry.link)] =
-                    '<img src="' + encodeURI(entry.icon_url) + '">';
+                ox.ui.appIcons[getApp(entry.link)] = icon(entry.icon_url);
             });
         });
         ext.point('io.ox/core/main/icons').get('mapping').run();
     });
 
     var LaunchersView = appcontrol.LaunchersView.extend({
+        initialize: function () {
+            appcontrol.LaunchersView.prototype.initialize.apply(this, arguments);
+
+            // Patch toggle icon
+            var title = this.$toggle.children().attr('title');
+            this.$toggle.empty()
+                .append($(ox.ui.appIcons.launcher).attr('title', title));
+        },
         update: function () {
             this.$ul.empty();
             var self = this;
@@ -80,9 +103,7 @@ define('io.ox.public-sector/navigation/register', [
                 target: entry.tabname
             }).append(
                 $('<div class="lcell">').append(
-                    $('<div class="icon">').append(
-                        $('<img>').attr('src', entry.icon_url)
-                    ),
+                    $('<div class="icon">').append($(icon(entry.icon_url))),
                     $('<div class="title">').text(entry.display_name)
                 )
             );
