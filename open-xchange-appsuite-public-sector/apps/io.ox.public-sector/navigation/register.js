@@ -1,12 +1,11 @@
 define('io.ox.public-sector/navigation/register', [
-    'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/api/tab',
     'io.ox/core/extensions',
     'io.ox/core/main/appcontrol',
     'gettext!io.ox.public-sector/i18n',
     'settings!io.ox.public-sector',
     'less!io.ox.public-sector/navigation/style'
-], function (Dropdown, tabAPI, ext, appcontrol, gt, settings) {
+], function (tabAPI, ext, appcontrol, gt, settings) {
     'use strict';
 
     var URL = settings.get('navigation/url');
