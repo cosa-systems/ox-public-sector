@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ox.de_DE\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2022-04-13 14:45+0200\n"
+"Last-Translator: \n"
+"Language-Team: American English <kde-i18n-de@kde.org>\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+"X-POOTLE-MTIME: 1410268670.000000\n"
+
+#: apps/io.ox.public-sector/element/register.js module:io.ox.public-sector/i18n
+msgid "Copy to clipboard"
+msgstr "In die Zwischenablage kopieren"
+
+#: apps/io.ox.public-sector/element/register.js module:io.ox.public-sector/i18n
+msgid "Copy to description"
+msgstr "In Beschreibung kopieren"
+
+#: apps/io.ox.public-sector/element/register.js module:io.ox.public-sector/i18n
+msgid "Copy to location field"
+msgstr "In Feld \"Ort\" kopieren"
+
+#: apps/io.ox.public-sector/element/register.js module:io.ox.public-sector/i18n
+msgid "Creating conference room..."
+msgstr "Erzeuge Konferenzraum..."
+
+#: apps/io.ox.public-sector/element/register.js module:io.ox.public-sector/i18n
+msgid "Link:"
+msgstr "Link:"
+
+#. %1$s contains the link to join the conference
+#. %1$s is the meeting link
+#: apps/io.ox.public-sector/element/register.js module:io.ox.public-sector/i18n
+msgid "Link: %1$s"
+msgstr "Link: %1$s"
+
+#: apps/io.ox.public-sector/element/register.js module:io.ox.public-sector/i18n
+msgid "Video Meeting"
+msgstr "Video-Meeting"

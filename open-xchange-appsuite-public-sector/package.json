@@ -7,7 +7,7 @@
     "build": "true",
     "e2e": "codeceptjs run",
     "screenshots": "codeceptjs run -c codecept.screenshots.conf.js",
-    "msgmerge": "for i in i18n/*.po; do msgmerge -Us --previous --backup=none \"$i\" i18n/ox.pot; done"
+    "msgmerge": "for i in i18n/*.po; do msgmerge -Us --previous --backup=none ${CORE_DIR:+-C \"${CORE_DIR}/$i\"} \"$i\" i18n/ox.pot; done"
   },
   "dependencies": {},
   "optionalDependencies": {
