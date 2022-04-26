@@ -2,7 +2,7 @@ Source: open-xchange-mailauth-impersonate
 Section: web
 Priority: optional
 Maintainer: Felix Marx
-Build-Depends: cdbs (>= 0.4.53), debhelper (>= 7.0.1), ant-optional (>= 1.7.0), openjdk-8-jdk-headless | adoptopenjdk-8-hotspot,
+Build-Depends: cdbs (>= 0.4.53), debhelper (>= 7.0.1), ant-optional (>= 1.7.0), java8-sdk-headless,
  open-xchange-core (>= 7.10.6), open-xchange-core (<< 7.10.7)
 Standards-Version: 3.9.8
 Homepage: http://www.open-xchange.com
