@@ -82,10 +82,13 @@ define('io.ox.public-sector/navigation/register', [
     });
 
     function createCategory(category) {
-        this.group(category.display_name);
+        var group = !!category.display_name;
+        if (group) {
+            this.group(category.display_name);
+        }
         _.each(category.entries, function (entry) {
             var makeApp = entry.tabname === oxTab ? ownApp : foreignApp;
-            this.append(makeApp(entry), { group: true });
+            this.append(makeApp(entry), { group: group });
         }, this);
     }
 

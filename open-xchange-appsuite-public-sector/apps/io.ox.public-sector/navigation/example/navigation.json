@@ -1,6 +1,21 @@
 {
   "categories": [
     {
+      "identifier": "portal",
+      "display_name": "",
+      "entries": [
+        {
+          "identifier": "ucs_portal",
+          "tabname": "tab_portal",
+          "icon_url": "https://portal.dpx-ox2.at-univention.de/univention/portal/icons/entries/ucs_portal.svg",
+          "display_name": "Portal",
+          "link": "https://portal.dpx-demo.at-univention.de/",
+          "description": "",
+          "keywords": ""
+        }
+      ]
+    },
+    {
       "identifier": "ux_fileshare",
       "display_name": "Dateien",
       "entries": [
