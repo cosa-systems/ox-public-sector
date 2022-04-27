@@ -7,67 +7,51 @@ define('io.ox.public-sector/element/register', [
 ], function (DisposableView, confAPI, ext, ics, gt) {
     'use strict';
 
-    var api = {
-        toRoom: function (appt) {
-            return {
-                description: appt.description,
-                enable_auto_deletion: false,
-                end_time: appt.endDate.value,
-                external_data: {
-                    'io.ox': {
-                        folder: appt.folder,
-                        id: appt.id,
-                        rrules: appt.rrule ? [appt.rrule] : []
-                    }
+    var format = 'YYYY-MM-DDThh:mm:ssZ';
+
+    function toRoom(appt) {
+        return {
+            description: appt.description || '',
+            enable_auto_deletion: false,
+            end_time: moment(appt.endDate.value).format(format),
+            external_data: {
+                'io.ox': {
+                    folder: appt.folder,
+                    id: appt.id,
+                    rrules: appt.rrule ? [appt.rrule] : []
+                }
+            },
+            start_time: moment(appt.startDate.value).format(format),
+            title: appt.summary || ''
+        };
+    }
+
+    function send(method, url, data) {
+        return ics.then(function (ics) {
+            return $.ajax({
+                url: ics.url + url,
+                method: method,
+                contentType: 'application/json; charset=utf-8',
+                xhrFields: { withCredentials: true },
+                headers: {
+                    'Accept-Language': ox.language.toLowerCase().replace('_', '-')
                 },
-                start_time: appt.startDate.value,
-                title: appt.summary
-            };
-        },
+                data: JSON.stringify(data),
+                dataType: 'json'
+            });
+        });
+    }
+
+    var api = {
         create: function (data) {
-            return ics.then(function (ics) {
-                return $.post({
-                    url: ics.url + 'nob/v1/meeting/create',
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(api.toRoom(data)),
-                    dataType: 'json'
-                });
-            });
-            /*
-            console.log('create', this.toRoom(data));
-            return $.when({
-                room_id: ++this.id,
-                meeting_url: '/meeting/' + this.id
-            });
-            */
+            return send('POST', 'nob/v1/meeting/create', toRoom(data));
         },
         update: function (id, data) {
-            return ics.then(function (ics) {
-                return $.put({
-                    url: ics.url + 'nob/v1/meeting/update',
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(_.extend(api.toRoom(data), { target_room_id: id })),
-                    dataType: 'json'
-                });
-            });
-            /*
-            console.log('update', id, this.toRoom(data));
-            return $.when();
-            */
+            return send('PUT', 'nob/v1/meeting/update',
+                _.extend(toRoom(data), { target_room_id: id }));
         },
         close: function (id) {
-            return ics.then(function (ics) {
-                return $.post({
-                    url: ics.url + 'nob/v1/close',
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify({ target_room_id: id }),
-                    dataType: 'json'
-                });
-            });
-            /*
-            console.log('close', id);
-            return $.when();
-            */
+            return send('POST', 'nob/v1/close', { target_room_id: id });
         }
     };
 
