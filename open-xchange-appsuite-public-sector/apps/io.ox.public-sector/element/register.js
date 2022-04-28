@@ -52,7 +52,10 @@ define('io.ox.public-sector/element/register', [
                 _.extend(toRoom(data), { target_room_id: id }));
         },
         close: function (id) {
-            return send('POST', 'nob/v1/meeting/close', { target_room_id: id });
+            return send('POST', 'nob/v1/meeting/close', {
+                target_room_id: id,
+                method: 'kick_all_participants'
+            });
         }
     };
 
@@ -70,7 +73,7 @@ define('io.ox.public-sector/element/register', [
             this.appointment = options.appointment;
             var conference = confAPI.getConference(this.appointment.get('conferences'));
             if (conference && conference.type === 'element' && conference.joinURL) {
-                this.model.set({
+                model.set({
                     id: conference.id,
                     url: conference.joinURL
                 });
@@ -82,7 +85,7 @@ define('io.ox.public-sector/element/register', [
                     });
                 });
             }
-            this.listenTo(this.model, 'change', this.update);
+            this.listenTo(model, 'change', this.update);
             this.listenTo(this.appointment, 'create update', this.changeMeeting);
             this.listenTo(this.appointment, 'discard', this.discardMeeting);
             this.on('dispose', this.discardMeeting);
@@ -137,13 +140,15 @@ define('io.ox.public-sector/element/register', [
         },
 
         update: function () {
-            var url = this.model.get('url');
             this.appointment.set('conferences', [{
-                id: this.model.get('id'),
-                uri: url,
-                features: ['AUDIO', 'VIDEO', 'CHAT'],
+                uri: this.model.get('url'),
+                feature: 'VIDEO',
                 label: gt('Video conference'),
-                extendedParameters: { 'X-OX-TYPE': 'element' }
+                extendedParameters: {
+                    'X-OX-TYPE': 'element',
+                    'X-OX-ID': this.model.get('id'),
+                    'X-OX-OWNER': ox.user_id
+                }
             }]);
             this.renderDone();
         },
