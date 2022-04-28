@@ -1,11 +1,13 @@
 define('io.ox.public-sector/element/register', [
     'io.ox/backbone/views/disposable',
+    'io.ox/calendar/api',
     'io.ox/conference/api',
     'io.ox/core/extensions',
+    'io.ox/core/http',
     'io.ox.public-sector/ics',
     'gettext!io.ox.public-sector/i18n',
     'less!io.ox.public-sector/element/style.less'
-], function (DisposableView, confAPI, ext, ics, gt) {
+], function (DisposableView, calendarAPI, confAPI, ext, http, ics, gt) {
     'use strict';
 
     var format = 'YYYY-MM-DDThh:mm:ssZ';
@@ -81,7 +83,8 @@ define('io.ox.public-sector/element/register', [
                 api.create(this.appointment.toJSON()).then(function (room) {
                     model.set({
                         id: room.room_id,
-                        url: room.meeting_url
+                        url: room.meeting_url,
+                        created: true
                     });
                 });
             }
@@ -142,7 +145,7 @@ define('io.ox.public-sector/element/register', [
         update: function () {
             this.appointment.set('conferences', [{
                 uri: this.model.get('url'),
-                feature: 'VIDEO',
+                features: ['VIDEO', 'AUDIO', 'CHAT'],
                 label: gt('Video conference'),
                 extendedParameters: {
                     'X-OX-TYPE': 'element',
@@ -161,14 +164,15 @@ define('io.ox.public-sector/element/register', [
             if (data.seriesId && (data.seriesId !== data.id)) return;
             // This appointment changed to an exception of a series - do not change the room
             if (data.seriesId && (data.seriesId === data.id) && !data.rrule) return;
+            // or check the model itself
+            if (data.seriesId && this.appointment.mode === 'appointment') return;
             api.update(id, data);
             this.off('dispose', this.discardMeeting);
         },
 
         discardMeeting: function () {
-            var id = this.model.get('id');
-            if (!id) return;
-            api.close(id);
+            if (!this.model.get('created')) return;
+            api.close(this.model.get('id'));
             this.off('dispose', this.discardMeeting);
         },
 
@@ -206,4 +210,20 @@ define('io.ox.public-sector/element/register', [
     ext.point('io.ox/calendar/edit/section').replace({ id: 'location', index: 750 });
 
     confAPI.add('element', { joinLinkTitle: gt('Join video conference') });
+
+    calendarAPI.on('beforedelete', function (list) {
+        if (!_.isArray(list)) list = [list];
+        try {
+            http.pause();
+            _.forEach(list, function (event) {
+                if (event.recurrenceId || event.recurrenceRange) return;
+                calendarAPI.get(event).then(function (event) {
+                    var conference = confAPI.getConference(event.get('conferences'));
+                    if (conference && conference.id) api.close(conference.id);
+                });
+            });
+        } finally {
+            http.resume();
+        }
+    });
 });
