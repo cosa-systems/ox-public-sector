@@ -3,7 +3,8 @@ define('io.ox.public-sector/element/register', [
     'io.ox/conference/api',
     'io.ox/core/extensions',
     'io.ox.public-sector/ics',
-    'gettext!io.ox.public-sector/i18n'
+    'gettext!io.ox.public-sector/i18n',
+    'less!io.ox.public-sector/element/style.less'
 ], function (DisposableView, confAPI, ext, ics, gt) {
     'use strict';
 
@@ -51,7 +52,7 @@ define('io.ox.public-sector/element/register', [
                 _.extend(toRoom(data), { target_room_id: id }));
         },
         close: function (id) {
-            return send('POST', 'nob/v1/close', { target_room_id: id });
+            return send('POST', 'nob/v1/meeting/close', { target_room_id: id });
         }
     };
 
@@ -69,7 +70,10 @@ define('io.ox.public-sector/element/register', [
             this.appointment = options.appointment;
             var conference = confAPI.getConference(this.appointment.get('conferences'));
             if (conference && conference.type === 'element' && conference.joinURL) {
-                this.model.set('url', conference.joinURL);
+                this.model.set({
+                    id: conference.id,
+                    url: conference.joinURL
+                });
             } else {
                 api.create(this.appointment.toJSON()).then(function (room) {
                     model.set({
@@ -94,7 +98,8 @@ define('io.ox.public-sector/element/register', [
         renderPending: function () {
             this.link = this.copy = this.actions = null;
             this.$el.empty().append(
-                $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">'),
+                // $('<img class="conference-logo" aria-hidden="true" src="apps/io.ox.public-sector/element/conference.svg">'),
+                $('<div class="conference-logo">'),
                 $.txt(gt('Creating conference room...')),
                 $('<i class="fa fa-refresh fa-spin" aria-hidden="true">')
             );
@@ -105,7 +110,8 @@ define('io.ox.public-sector/element/register', [
             var url = this.model.get('url');
 
             this.$el.empty().append(
-                $('<i class="fa fa-video-camera conference-logo" aria-hidden="true">'),
+                // $('<img class="conference-logo" aria-hidden="true" src="apps/io.ox.public-sector/element/conference.svg">'),
+                $('<div class="conference-logo">'),
                 $('<div class="ellipsis">').append(
                     $('<b>').text(gt('Link:')),
                     $.txt(' '),
@@ -136,7 +142,7 @@ define('io.ox.public-sector/element/register', [
                 id: this.model.get('id'),
                 uri: url,
                 features: ['AUDIO', 'VIDEO', 'CHAT'],
-                label: gt('Video Meeting'),
+                label: gt('Video conference'),
                 extendedParameters: { 'X-OX-TYPE': 'element' }
             }]);
             this.renderDone();
@@ -182,7 +188,7 @@ define('io.ox.public-sector/element/register', [
         id: 'element',
         index: 400,
         value: 'element',
-        label: gt('Video Meeting'),
+        label: gt('Video conference'),
         render: function (view) {
             this.append(new ConferenceView({
                 appointment: view.appointment
@@ -193,4 +199,6 @@ define('io.ox.public-sector/element/register', [
 
     // move location to later position
     ext.point('io.ox/calendar/edit/section').replace({ id: 'location', index: 750 });
+
+    confAPI.add('element', { joinLinkTitle: gt('Join video conference') });
 });

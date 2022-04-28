@@ -1,4 +1,4 @@
 {
-    "namespace": "io.ox/calendar/edit/main",
+    "namespace": ["io.ox/calendar/edit/main", "io.ox/calendar/view-detail"],
     "requires": "public-sector"
 }

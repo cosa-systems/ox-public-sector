@@ -26,6 +26,10 @@ msgid "Creating conference room..."
 msgstr "Erstelle Konferenzraum..."
 
 #: apps/io.ox.public-sector/element/register.js module:io.ox.public-sector/i18n
+msgid "Join video conference"
+msgstr "Videokonferenz beitreten"
+
+#: apps/io.ox.public-sector/element/register.js module:io.ox.public-sector/i18n
 msgid "Link:"
 msgstr "Link:"
 
@@ -36,5 +40,5 @@ msgid "Link: %1$s"
 msgstr "Link: %1$s"
 
 #: apps/io.ox.public-sector/element/register.js module:io.ox.public-sector/i18n
-msgid "Video Meeting"
-msgstr "Video-Meeting"
+msgid "Video conference"
+msgstr "Videokonferenz"

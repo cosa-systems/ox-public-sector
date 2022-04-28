@@ -36,7 +36,7 @@ msgstr ""
 
 #: apps/io.ox.public-sector/element/register.js
 #: module:io.ox.public-sector/i18n
-msgid "Video Meeting"
+msgid "Video conference"
 msgstr ""
 
 #. %1$s contains the link to join the conference
@@ -44,4 +44,9 @@ msgstr ""
 #: apps/io.ox.public-sector/element/register.js
 #: module:io.ox.public-sector/i18n
 msgid "Link: %1$s"
+msgstr ""
+
+#: apps/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector/i18n
+msgid "Join video conference"
 msgstr ""
