@@ -2,16 +2,22 @@ define('io.ox.public-sector/navigation/register', [
     'io.ox/core/api/tab',
     'io.ox/core/extensions',
     'io.ox/core/main/appcontrol',
+    'io.ox.public-sector/ics',
     'gettext!io.ox.public-sector/i18n',
     'settings!io.ox.public-sector',
     'less!io.ox.public-sector/navigation/style'
-], function (tabAPI, ext, appcontrol, gt, settings) {
+], function (tabAPI, ext, appcontrol, ics, gt, settings) {
     'use strict';
 
     var URL = settings.get('navigation/url');
     if (!URL) return;
 
-    var config = $.ajax(URL + '?lang=' + ox.language, { dataType: 'json' }),
+    var config = ics.then(function (ics) {
+            return $.ajax(ics.url + 'navigation.json?lang=' + ox.language, {
+                xhrFields: { withCredentials: true },
+                dataType: 'json'
+            });
+        }),
         images = settings.get('navigation/color', true),
         oxTab = settings.get('navigation/oxtabname', 'ox');
 
