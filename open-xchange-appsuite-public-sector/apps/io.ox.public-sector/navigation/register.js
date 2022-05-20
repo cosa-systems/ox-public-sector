@@ -99,9 +99,9 @@ define('io.ox.public-sector/navigation/register', [
     }
 
     function ownApp(entry) {
-        return new appcontrol.LauncherView({
-            model: ox.ui.apps.get(getApp(entry.link))
-        }).render().$el;
+        var model = ox.ui.apps.get(getApp(entry.link));
+        if (entry.display_name) model.set('title', entry.display_name);
+        return new appcontrol.LauncherView({ model: model }).render().$el;
     }
 
     function foreignApp(entry) {
