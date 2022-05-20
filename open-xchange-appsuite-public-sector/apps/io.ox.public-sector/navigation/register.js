@@ -9,9 +9,6 @@ define('io.ox.public-sector/navigation/register', [
 ], function (tabAPI, ext, appcontrol, ics, gt, settings) {
     'use strict';
 
-    var URL = settings.get('navigation/url');
-    if (!URL) return;
-
     var config = ics.then(function (ics) {
             return $.ajax(ics.url + 'navigation.json?lang=' + ox.language, {
                 xhrFields: { withCredentials: true },
