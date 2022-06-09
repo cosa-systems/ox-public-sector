@@ -1,9 +1,10 @@
 define('io.ox.public-sector/ics', [
+    'io.ox/core/extensions',
     'settings!io.ox.public-sector'
-], function (settings) {
+], function (ext, settings) {
     'use strict';
 
-    var session = $.Deferred(),
+    var session = $.Deferred(), promise = session.promise(),
         icsURL = new URL(settings.get('ics/url', location.origin));
 
     $(window).on('message', messageHandler);
@@ -25,5 +26,17 @@ define('io.ox.public-sector/ics', [
         iframe.remove();
     }
 
-    return session.promise();
+    // This is executed in the core namespace thanks to navigation.
+    // Once there is more generic code, it can move into a separate file.
+    ext.point('io.ox.nextcloud/file-picker/options').extend({
+        id: 'public-sector',
+        after: 'default',
+        perform: function (baton) {
+            delete baton.data.accessToken;
+            baton.data.useCookies = true;
+            return promise;
+        }
+    });
+
+    return promise;
 });
