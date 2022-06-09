@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: "Viktor Pracht" <viktor.pracht@open-xchange.com>
 Build-Depends: debhelper (>= 8.0.0), lsb-release, cdbs (>= 0.4.53),
  ant (>= 1.7.0), ant-optional (>= 1.7.0),
- java8-sdk-headless, nodejs (>= 10.0)
+ java8-sdk-headless, nodejs (>= 10.0), npm
 Standards-Version: 3.9.8
 
 Package: open-xchange-appsuite-public-sector
