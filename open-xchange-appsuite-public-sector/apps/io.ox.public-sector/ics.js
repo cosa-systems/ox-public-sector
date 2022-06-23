@@ -32,8 +32,9 @@ define('io.ox.public-sector/ics', [
         id: 'public-sector',
         after: 'default',
         perform: function (baton) {
-            delete baton.data.accessToken;
-            baton.data.useCookies = true;
+            if (!baton.data.accessToken) {
+                baton.data.useCookies = true;
+            }
             return promise;
         }
     });
