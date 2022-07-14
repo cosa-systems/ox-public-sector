@@ -4,6 +4,7 @@ ciPipeline(
     testProject:"custom-test-release-7.10.3",
     testPackageList:"open-xchange-custom-test",
     packagesToTest:[
-        "com.openexchange.mailauth.impersonate"
+        "com.openexchange.mailauth.impersonate",
+        "com.openexchange.matrixproxy.servlet"
     ]
 )

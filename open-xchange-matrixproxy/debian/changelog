@@ -1,0 +1,5 @@
+open-xchange-matrixproxy (@GITVERSION@) stable; urgency=medium
+
+  * @GITTAGANNOTATION@
+
+ -- @GITTAGAUTHOR@  @GITTAGANNOTATIONTIME@

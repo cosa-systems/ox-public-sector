@@ -1,0 +1,81 @@
+.launcher ul.launcher-dropdown.dropdown-menu {
+    min-width: 260px;
+    max-width: 420px;
+    padding: 12px 0;
+    width: fit-content;
+
+    .dropdown-header {
+        color: #1f1f1f;
+        font-size: 17px;
+        font-weight: bold;
+        line-height: 20px;
+        padding: 8px 16px 4px;
+    }
+
+    a.lcell {
+        border: 0;
+        padding: 12px 16px;
+
+        .icon { margin: 0 16px 0 0; }
+
+        .icon, .icon img {
+            height: 20px;
+            width: 20px;
+        }
+
+        svg {
+            top: initial;
+            width: 20px;
+        }
+
+        .title {
+            font-size: 15px;
+            line-height: 20px;
+            width: initial;
+        }
+    }
+
+    a, .lcell {
+        color: #1f1f1f;
+        flex-direction: row;
+        font-weight: normal;
+        height: initial;
+        margin: 0;
+        white-space: nowrap;
+        width: initial;
+    }
+
+    li {
+        float: none;
+
+        a:focus .public-sector-launcher { color: #fff; }
+    }
+}
+
+.public-sector-launcher {
+    background-color: currentColor;
+//    -webkit-mask: url(apps/io.ox.public-sector/navigation/launcher.svg) center;
+//    mask: url(apps/io.ox.public-sector/navigation/launcher.svg) center;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+}
+
+div#io-ox-appcontrol {
+    border-bottom-color: #ddd;
+
+    #io-ox-topleftbar, #io-ox-toprightbar {
+        .launcher > a, .launcher > button { padding: 16px 9px; }
+    }
+}
+
+.smartphone {
+    #io-ox-appcontrol { height: 64px; }
+    #io-ox-core #io-ox-screens { top: 64px; }
+    .launcher-dropdown.dropdown-menu {
+        left: 12px !important;
+        right: auto !important;
+        top: 64px !important;
+        width: fit-content !important;
+    }
+}

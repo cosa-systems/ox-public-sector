@@ -1,15 +1,15 @@
-Source: open-xchange-mailauth-impersonate
+Source: open-xchange-matrixproxy
 Section: web
 Priority: optional
-Maintainer: Felix Marx
+Maintainer: Carsten Hoeger
 Build-Depends: cdbs (>= 0.4.53), debhelper (>= 7.0.1), ant-optional (>= 1.7.0), java8-sdk-headless,
  open-xchange-core (>= 7.10.6), open-xchange-core (<< 7.10.7)
 Standards-Version: 3.9.8
 Homepage: http://www.open-xchange.com
 
-Package: open-xchange-mailauth-impersonate
+Package: open-xchange-matrixproxy
 Architecture: all
 Depends: ${misc:Depends},
  open-xchange-core (>= 7.10.6), open-xchange-core (<< 7.10.7)
-Description: This package provides a MailAuthenticator for secondary Mailboxes which uses token_exchange to get tokens
+Description: Open-Xchange Matrix Bot Proxy
 
