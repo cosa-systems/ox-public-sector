@@ -10,7 +10,8 @@ define('io.ox.public-sector/navigation/register', [
     'use strict';
 
     var config = ics.then(function (ics) {
-            return $.ajax(ics.url + 'navigation.json?lang=' + ox.language, {
+            return $.ajax(ics.url + 'navigation.json?language=' +
+                ox.language.toLowerCase().replace('_', '-'), {
                 xhrFields: { withCredentials: true },
                 dataType: 'json'
             });
