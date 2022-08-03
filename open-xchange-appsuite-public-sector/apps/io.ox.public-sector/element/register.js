@@ -37,7 +37,8 @@ define('io.ox.public-sector/element/register', [
                 contentType: 'application/json; charset=utf-8',
                 xhrFields: { withCredentials: true },
                 headers: {
-                    'Accept-Language': ox.language.toLowerCase().replace('_', '-')
+                    'Accept-Language': ox.language.toLowerCase().replace('_', '-'),
+                    'x-csrf-token': ics.csrfToken
                 },
                 data: JSON.stringify(data),
                 dataType: 'json'

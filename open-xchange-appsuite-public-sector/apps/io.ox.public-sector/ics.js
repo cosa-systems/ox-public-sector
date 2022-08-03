@@ -18,7 +18,10 @@ define('io.ox.public-sector/ics', [
 
         var data = e.originalEvent.data;
         if (data.loggedIn) {
-            session.resolve({ url: icsURL });
+            session.resolve({
+                csrfToken: data.csrftoken,
+                url: icsURL
+            });
         } else {
             session.reject(false);
         }
