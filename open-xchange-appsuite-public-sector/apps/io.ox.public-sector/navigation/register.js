@@ -11,7 +11,7 @@ define('io.ox.public-sector/navigation/register', [
 
     var config = ics.then(function (ics) {
             return $.ajax(ics.url + 'navigation.json?language=' +
-                ox.language.toLowerCase().replace('_', '-'), {
+                ox.language.replace('_', '-'), {
                 xhrFields: { withCredentials: true },
                 dataType: 'json'
             });
@@ -44,7 +44,7 @@ define('io.ox.public-sector/navigation/register', [
         // Override app icons
         _.each(config.categories, function (category) {
             _.each(category.entries, function (entry) {
-                if (entry.tabname !== oxTab) return;
+                if (entry.target !== oxTab) return;
                 ox.ui.appIcons[getApp(entry.link)] = icon(entry.icon_url);
             });
         });
@@ -91,7 +91,7 @@ define('io.ox.public-sector/navigation/register', [
             this.group(category.display_name);
         }
         _.each(category.entries, function (entry) {
-            var makeApp = entry.tabname === oxTab ? ownApp : foreignApp;
+            var makeApp = entry.target === oxTab ? ownApp : foreignApp;
             this.append(makeApp(entry), { group: group });
         }, this);
     }
@@ -106,7 +106,7 @@ define('io.ox.public-sector/navigation/register', [
         return $('<a tabindex="-1" role="menuitem" class="btn btn-link lcell">')
             .attr({
                 href: entry.link,
-                target: entry.tabname
+                target: entry.target
             }).append(
                 $('<div class="lcell">').append(
                     $('<div class="icon">').append($(icon(entry.icon_url))),
