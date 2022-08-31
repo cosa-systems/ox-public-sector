@@ -1,6 +1,13 @@
 #!/bin/sh
 set -e
 
+if [ -z "$1" ]; then
+    echo -n "Current environment: "
+    sed -nre '/"server":/s/^.*webmail\.(.*)\.at-univention.de.*$/\1/p' \
+        grunt/local.conf.json
+    exit
+fi
+
 DOMAIN="$1.at-univention.de"
 CA="/home/vp/dev/vm/traefik/CA"
 
