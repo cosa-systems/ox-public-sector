@@ -4,10 +4,13 @@ define('io.ox.public-sector/element/register', [
     'io.ox/conference/api',
     'io.ox/core/extensions',
     'io.ox/core/http',
+    'io.ox/core/notifications',
     'io.ox.public-sector/ics',
     'gettext!io.ox.public-sector/i18n',
     'less!io.ox.public-sector/element/style.less'
-], function (DisposableView, calendarAPI, confAPI, ext, http, ics, gt) {
+], function (
+    DisposableView, calendarAPI, confAPI, ext, http, notifications, ics, gt
+) {
     'use strict';
 
     var format = 'YYYY-MM-DDThh:mm:ssZ';
@@ -85,7 +88,12 @@ define('io.ox.public-sector/element/register', [
                     model.set({
                         id: room.room_id,
                         url: room.meeting_url,
-                        created: true
+                        created: true,
+                        error: null
+                    });
+                }, function () {
+                    model.set({
+                        error: gt('Could not create the conference room')
                     });
                 });
             }
@@ -96,15 +104,25 @@ define('io.ox.public-sector/element/register', [
         },
 
         render: function () {
+            this.copy = this.actions = null;
             this.$el.empty();
-            var url = this.model.get('url');
-            if (!url) return this.renderPending();
+            if (this.model.get('error')) return this.renderError();
+            if (!this.model.get('url')) return this.renderPending();
             return this.renderDone();
         },
 
+        renderError: function () {
+            this.$el.append(
+                $('<div class="conference-logo error">').append(
+                    $('<i class="fa fa-exclamation" aria-hidden="true">')
+                ),
+                $.txt(this.model.get('error'))
+            );
+            return this;
+        },
+
         renderPending: function () {
-            this.link = this.copy = this.actions = null;
-            this.$el.empty().append(
+            this.$el.append(
                 // $('<img class="conference-logo" aria-hidden="true" src="apps/io.ox.public-sector/element/conference.svg">'),
                 $('<div class="conference-logo">'),
                 $.txt(gt('Creating conference room...')),
@@ -116,7 +134,7 @@ define('io.ox.public-sector/element/register', [
         renderDone: function () {
             var url = this.model.get('url');
 
-            this.$el.empty().append(
+            this.$el.append(
                 // $('<img class="conference-logo" aria-hidden="true" src="apps/io.ox.public-sector/element/conference.svg">'),
                 $('<div class="conference-logo">'),
                 $('<div class="ellipsis">').append(
@@ -144,17 +162,19 @@ define('io.ox.public-sector/element/register', [
         },
 
         update: function () {
-            this.appointment.set('conferences', [{
-                uri: this.model.get('url'),
-                features: ['VIDEO', 'AUDIO', 'CHAT'],
-                label: gt('Video conference'),
-                extendedParameters: {
-                    'X-OX-TYPE': 'element',
-                    'X-OX-ID': this.model.get('id'),
-                    'X-OX-OWNER': ox.user_id
-                }
-            }]);
-            this.renderDone();
+            if (!this.model.get('error')) {
+                this.appointment.set('conferences', [{
+                    uri: this.model.get('url'),
+                    features: ['VIDEO', 'AUDIO', 'CHAT'],
+                    label: gt('Video conference'),
+                    extendedParameters: {
+                        'X-OX-TYPE': 'element',
+                        'X-OX-ID': this.model.get('id'),
+                        'X-OX-OWNER': ox.user_id
+                    }
+                }]);
+            }
+            this.render();
         },
 
         changeMeeting: function () {
@@ -167,13 +187,19 @@ define('io.ox.public-sector/element/register', [
             if (data.seriesId && (data.seriesId === data.id) && !data.rrule) return;
             // or check the model itself
             if (data.seriesId && this.appointment.mode === 'appointment') return;
-            api.update(id, data);
+            var model = this.model;
+            api.update(id, data).fail(function () {
+                model.set('error', gt('Could not update the conference room'));
+            });
             this.off('dispose', this.discardMeeting);
         },
 
         discardMeeting: function () {
             if (!this.model.get('created')) return;
-            api.close(this.model.get('id'));
+            api.close(this.model.get('id')).fail(function () {
+                notifications.yell('error',
+                    gt('Could not delete the conference room'));
+            });
             this.off('dispose', this.discardMeeting);
         },
 
@@ -220,7 +246,11 @@ define('io.ox.public-sector/element/register', [
                 if (event.recurrenceId || event.recurrenceRange) return;
                 calendarAPI.get(event).then(function (event) {
                     var conference = confAPI.getConference(event.get('conferences'));
-                    if (conference && conference.id) api.close(conference.id);
+                    if (!conference || !conference.id) return;
+                    api.close(conference.id).fail(function () {
+                        notifications.yell('error',
+                            gt('Could not delete the conference room'));
+                    });
                 });
             });
         } finally {
