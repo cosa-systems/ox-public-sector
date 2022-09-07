@@ -32,9 +32,9 @@ define('io.ox.public-sector/element/register', [
         };
     }
 
-    function send(method, url, data) {
+    function send(method, url, data, options) {
         return ics.then(function (ics) {
-            return $.ajax({
+            return $.ajax(_.extend({
                 url: ics.url + url,
                 method: method,
                 contentType: 'application/json; charset=utf-8',
@@ -44,14 +44,15 @@ define('io.ox.public-sector/element/register', [
                     'x-csrf-token': ics.csrfToken
                 },
                 data: JSON.stringify(data),
-                dataType: 'json'
-            });
+                dataType: 'text'
+            }, options || {}));
         });
     }
 
     var api = {
         create: function (data) {
-            return send('POST', 'nob/v1/meeting/create', toRoom(data));
+            return send('POST', 'nob/v1/meeting/create', toRoom(data),
+                { dataType: 'json' });
         },
         update: function (id, data) {
             return send('PUT', 'nob/v1/meeting/update',
@@ -196,7 +197,7 @@ define('io.ox.public-sector/element/register', [
 
         discardMeeting: function () {
             if (!this.model.get('created')) return;
-            api.close(this.model.get('id')).fail(function () {
+            api.close(this.model.get('id')).then(null, function () {
                 notifications.yell('error',
                     gt('Could not delete the conference room'));
             });
