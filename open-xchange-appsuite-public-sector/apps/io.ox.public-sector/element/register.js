@@ -13,7 +13,7 @@ define('io.ox.public-sector/element/register', [
 ) {
     'use strict';
 
-    var format = 'YYYY-MM-DDThh:mm:ssZ';
+    var format = 'YYYY-MM-DDTHH:mm:ssZ';
 
     function toRoom(appt) {
         return {
