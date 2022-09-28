@@ -45,7 +45,10 @@ define('io.ox.public-sector/navigation/register', [
         _.each(config.categories, function (category) {
             _.each(category.entries, function (entry) {
                 if (entry.target !== oxTab) return;
-                ox.ui.appIcons[getApp(entry.link)] = icon(entry.icon_url);
+                var id = getApp(entry.link),
+                    app = ox.ui.apps.get(id);
+                ox.ui.appIcons[id] = icon(entry.icon_url);
+                if (app) app.set('icon', ox.ui.appIcons[id]);
             });
         });
         ext.point('io.ox/core/main/icons').get('mapping').run();
