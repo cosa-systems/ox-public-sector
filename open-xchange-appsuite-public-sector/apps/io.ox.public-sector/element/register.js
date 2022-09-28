@@ -188,9 +188,9 @@ define('io.ox.public-sector/element/register', [
             if (data.seriesId && (data.seriesId === data.id) && !data.rrule) return;
             // or check the model itself
             if (data.seriesId && this.appointment.mode === 'appointment') return;
-            var model = this.model;
             api.update(id, data).fail(function () {
-                model.set('error', gt('Could not update the conference room'));
+                notifications.yell('error',
+                    gt('Could not update the conference room'));
             });
             this.off('dispose', this.discardMeeting);
         },
