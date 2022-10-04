@@ -11,6 +11,11 @@ msgstr ""
 
 #: apps/io.ox.public-sector/element/register.js
 #: module:io.ox.public-sector/i18n
+msgid "Could not create the conference room"
+msgstr ""
+
+#: apps/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector/i18n
 msgid "Creating conference room..."
 msgstr ""
 
@@ -37,6 +42,16 @@ msgstr ""
 #: apps/io.ox.public-sector/element/register.js
 #: module:io.ox.public-sector/i18n
 msgid "Video conference"
+msgstr ""
+
+#: apps/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector/i18n
+msgid "Could not update the conference room"
+msgstr ""
+
+#: apps/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector/i18n
+msgid "Could not delete the conference room"
 msgstr ""
 
 #. %1$s contains the link to join the conference

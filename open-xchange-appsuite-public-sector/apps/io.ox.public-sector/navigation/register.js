@@ -10,7 +10,8 @@ define('io.ox.public-sector/navigation/register', [
     'use strict';
 
     var config = ics.then(function (ics) {
-            return $.ajax(ics.url + 'navigation.json?lang=' + ox.language, {
+            return $.ajax(ics.url + 'navigation.json?language=' +
+                ox.language.replace('_', '-'), {
                 xhrFields: { withCredentials: true },
                 dataType: 'json'
             });
@@ -43,8 +44,11 @@ define('io.ox.public-sector/navigation/register', [
         // Override app icons
         _.each(config.categories, function (category) {
             _.each(category.entries, function (entry) {
-                if (entry.tabname !== oxTab) return;
-                ox.ui.appIcons[getApp(entry.link)] = icon(entry.icon_url);
+                if (entry.target !== oxTab) return;
+                var id = getApp(entry.link),
+                    app = ox.ui.apps.get(id);
+                ox.ui.appIcons[id] = icon(entry.icon_url);
+                if (app) app.set('icon', ox.ui.appIcons[id]);
             });
         });
         ext.point('io.ox/core/main/icons').get('mapping').run();
@@ -90,7 +94,7 @@ define('io.ox.public-sector/navigation/register', [
             this.group(category.display_name);
         }
         _.each(category.entries, function (entry) {
-            var makeApp = entry.tabname === oxTab ? ownApp : foreignApp;
+            var makeApp = entry.target === oxTab ? ownApp : foreignApp;
             this.append(makeApp(entry), { group: group });
         }, this);
     }
@@ -105,7 +109,7 @@ define('io.ox.public-sector/navigation/register', [
         return $('<a tabindex="-1" role="menuitem" class="btn btn-link lcell">')
             .attr({
                 href: entry.link,
-                target: entry.tabname
+                target: entry.target
             }).append(
                 $('<div class="lcell">').append(
                     $('<div class="icon">').append($(icon(entry.icon_url))),

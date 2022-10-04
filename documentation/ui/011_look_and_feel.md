@@ -58,7 +58,9 @@ The top bar is combined into a constant layout on all platforms and consists of 
 |                     | Background color  | `rgba(0, 0, 0, 0.1)` |
 | Top Bar bottom line | Height            | `1px`     |
 |                     | Color             | `#dddddd` |
-| Top Bar logo        | Image             | ![Top Bar Logo](images/theme/logo.svg "Top Bar Logo") |
+| Top Bar logo        | Image             | Please see below |
+
+![Top Bar Logo](images/theme/logo.svg "Top Bar Logo")
 
 ### Measurements
 
