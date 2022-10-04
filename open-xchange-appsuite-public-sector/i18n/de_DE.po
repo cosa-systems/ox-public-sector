@@ -30,8 +30,6 @@ msgid "Could not delete the conference room"
 msgstr "Konnte Konferenzraum nicht löschen"
 
 #: apps/io.ox.public-sector/element/register.js module:io.ox.public-sector/i18n
-#, fuzzy
-#| msgid "Creating conference room..."
 msgid "Could not update the conference room"
 msgstr "Konnte Konferenzraum nicht aktualisieren"
 
