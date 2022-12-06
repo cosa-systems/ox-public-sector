@@ -1,3 +1,0 @@
-[submodule "build"]
-	path = build
-	url = git@gitlab.open-xchange.com:engineering/build.git
