@@ -2,7 +2,6 @@
 <psf version="1.0">
 <provider id="org.eclipse.egit.core.GitProvider">
 <project reference="1.0,git@gitlab.open-xchange.com:extensions/public-sector.git,develop,open-xchange-appsuite-public-sector"/>
-<project reference="1.0,git@gitlab.open-xchange.com:extensions/public-sector.git,develop,open-xchange-mailauth-impersonate"/>
 <project reference="1.0,git@gitlab.open-xchange.com:extensions/public-sector.git,develop,open-xchange-matrixproxy"/>
 </provider>
 </psf>
