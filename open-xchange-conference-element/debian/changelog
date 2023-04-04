@@ -1,0 +1,5 @@
+open-xchange-conference-element (@GITVERSION@) stable; urgency=medium
+
+  * @GITTAGANNOTATION@
+
+ -- @GITTAGAUTHOR@  @GITTAGANNOTATIONTIME@

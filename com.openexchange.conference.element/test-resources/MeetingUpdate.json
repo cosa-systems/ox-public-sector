@@ -1,0 +1,15 @@
+{
+	"description": "",
+	"enable_auto_deletion": false,
+	"end_time": "2023-03-15T13:00:00+01:00",
+	"external_data": {
+		"io.ox": {
+			"folder": "cal://0/1595",
+			"id": "2",
+			"rrules": []
+		}
+	},
+	"start_time": "2023-03-15T12:00:00+01:00",
+	"target_room_id": "!jUMFuPtcFZgavxdOeP:matrix.viktor.develop.souvap-univention.de",
+	"title": "Konferenz"
+}

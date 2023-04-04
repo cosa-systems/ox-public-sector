@@ -1,0 +1,24 @@
+apply plugin: 'java'
+
+repositories {
+    maven {
+        url = uri("https://artifactory.production.cloud.oxoe.io/artifactory/libs-release")
+    }
+}
+
+configurations {
+    toCopy
+}
+
+dependencies {
+    toCopy 'com.github.tomakehurst:wiremock-jre8:2.35.0'
+}
+
+task download(type: Copy) {
+    from configurations.toCopy 
+    into 'lib'
+}
+
+//test {
+//    testLogging.showStandardStreams = true
+//}

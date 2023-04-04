@@ -1,0 +1,313 @@
+
+/*
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
+
+package com.openexchange.conference.element.impl;
+
+import static com.openexchange.chronos.common.CalendarUtils.hasExternalOrganizer;
+import static com.openexchange.chronos.common.CalendarUtils.optExtendedParameterValue;
+import static com.openexchange.conference.element.impl.N.logger;
+import static com.openexchange.conference.element.impl.N.notNull;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
+import org.dmfs.rfc5545.DateTime;
+import org.slf4j.Logger;
+import com.openexchange.annotation.NonNullByDefault;
+import com.openexchange.annotation.Nullable;
+import com.openexchange.chronos.Conference;
+import com.openexchange.chronos.Event;
+import com.openexchange.chronos.EventField;
+import com.openexchange.chronos.service.CalendarEvent;
+import com.openexchange.chronos.service.CalendarHandler;
+import com.openexchange.chronos.service.DeleteResult;
+import com.openexchange.chronos.service.UpdateResult;
+import com.openexchange.conference.element.ElementConfiguration;
+import com.openexchange.conference.element.impl.dto.ExternalData;
+import com.openexchange.conference.element.impl.dto.ElementMeeting;
+import com.openexchange.conference.element.impl.dto.OXCalReference;
+import com.openexchange.config.ConfigurationService;
+import com.openexchange.config.Interests;
+import com.openexchange.config.Reloadable;
+import com.openexchange.config.Reloadables;
+import com.openexchange.exception.OXException;
+import com.openexchange.java.Strings;
+import com.openexchange.rest.client.httpclient.HttpClientService;
+import com.openexchange.rest.client.httpclient.ManagedHttpClient;
+
+/**
+ * {@link ElementConferenceHandler}
+ *
+ * @author <a href="mailto:carsten.hoeger@open-xchange.com">Carsten Hoeger</a>
+ */
+@NonNullByDefault
+public class ElementConferenceHandler implements CalendarHandler, Reloadable {
+
+    private static final Logger LOG = logger(ElementConferenceHandler.class);
+
+    /** The name of the type property parameter used in handled conferences */
+    public static final String PARAMETER_TYPE  = "X-OX-TYPE";
+    /** The name of the id property parameter used in handled conferences */
+    public static final String PARAMETER_ID    = "X-OX-ID";
+    public static final String CONFERENCE_TYPE = "element";
+
+    private final HttpClientService httpClientService;
+
+    private AtomicReference<ElementConfiguration> configRef;
+
+    public ElementConferenceHandler(HttpClientService httpClientService, ConfigurationService configService) throws OXException {
+        super();
+        this.httpClientService = httpClientService;
+        final ElementConfiguration config = ElementConfiguration.getConfig(configService);
+        LOG.info("using configuration: {}", config);
+        this.configRef = new AtomicReference<>(config);
+    }
+
+    @Override
+    public void handle(@Nullable CalendarEvent event) {
+        if (null == event) {
+            return;
+        }
+        if (!configRef.get().isEnabled()) {
+            LOG.debug("ElementConferenceHandler not enabled");
+            return;
+        }
+        LOG.debug("Event: {}", event.toString());
+
+        for (UpdateResult update : event.getUpdates()) {
+            handleUpdate(notNull(update));
+        }
+        for (DeleteResult delete : event.getDeletions()) {
+            handleDelete(notNull(delete));
+        }
+    }
+
+    /**
+     * @param update
+     */
+    private void handleUpdate(UpdateResult update) {
+        if (hasExternalOrganizer(update.getOriginal())) {
+            LOG.debug("No external organizer: {}", update.getOriginal());
+            return;
+        }
+        List<Conference> originalConferences = getConferences(update.getOriginal());
+        List<Conference> updateConferences = getConferences(update.getUpdate());
+
+        if (originalConferences.isEmpty() && updateConferences.isEmpty()) {
+            LOG.debug("no conferences to update");
+            return;
+        }
+
+        if (originalConferences.isEmpty()) {
+            LOG.debug("new appointment, nothing to update");
+        } else if (updateConferences.isEmpty()) {
+            LOG.debug("remove {}", originalConferences);
+            delete(originalConferences);
+        } else {
+            // calculate diffs. Again, "added" is not relevant
+            List<Conference> removed = new ArrayList<>(originalConferences);
+            List<Conference> changed = new ArrayList<>();
+            for (Conference upd : updateConferences) {
+                removed.removeIf(c -> matches(c, upd));
+                Optional<Conference> optional = originalConferences.stream().filter(c -> matches(c, upd)).findAny();
+                if (optional.isPresent()) {
+                    changed.add(optional.get());
+                }
+            }
+            if (timeHasChanged(update)) {
+                LOG.debug("update {}", changed);
+                change(changed, notNull(update.getUpdate()));
+            }
+            LOG.debug("delete {}", removed);
+            delete(removed);
+        }
+
+    }
+
+    /**
+     * @param changed
+     * @param update
+     * @param event
+     */
+    private void change(List<Conference> conferences, Event updatedEvent) {
+        final ElementConfiguration config = configRef.get();
+        final ElementClient mec = new ElementClient(httpClient(config.getHttpClientId()), notNull(config.getMeetingHostUrl()), notNull(config.getAuthToken()));
+        for (Conference conf : conferences) {
+            final String roomId = optExtendedParameterValue(conf.getExtendedParameters(), PARAMETER_ID);
+            if (null != roomId) {
+                try {
+                    mec.updateMeeting(ElementMeeting.builder()
+                        .withTargetRoomId(roomId)
+                        .withStartTime(toZonedDateTime(notNull(updatedEvent.getStartDate())))
+                        .withEndTime(toZonedDateTime(notNull(updatedEvent.getEndDate())))
+                        .withExternalData(ExternalData.builder()
+                            .withIoDotOx(OXCalReference.builder()
+                                .withId(notNull(Integer.toString(conf.getId()))) // FIXME???
+                                .withFolder(notNull(updatedEvent.getFolderId())) // FIXME???
+                                .build())
+                            .build())
+                        .build());
+                } catch (OXException e) {
+                    LOG.error(e.getMessage(), e);
+                }
+            } else {
+                LOG.debug("{} not found, no meeting to update", PARAMETER_ID);
+            }
+        }
+    }
+
+    /**
+     * @param dt
+     * @return
+     */
+    private static ZonedDateTime toZonedDateTime(final DateTime dt) {
+        final ZoneId timeZone;
+        {
+            final TimeZone tz = dt.getTimeZone();
+            if (null != tz) {
+                timeZone = tz.toZoneId();
+            } else {
+                timeZone = ZoneId.systemDefault();
+            }
+        }
+        return notNull(ZonedDateTime.of(dt.getYear(), dt.getMonth(), dt.getDayOfMonth(), dt.getHours(), dt.getMinutes(), dt.getSeconds(), 0, timeZone));
+    }
+
+    /**
+     * @param delete
+     */
+    private void handleDelete(DeleteResult delete) {
+        Event original = delete.getOriginal();
+        if (hasExternalOrganizer(original)) {
+            LOG.debug("No external organizer: {}", original);
+            return;
+        }
+
+        List<Conference> conferences = getConferences(original);
+        delete(conferences);
+    }
+
+    /**
+     * @param conferences
+     * @param original
+     * @param event
+     */
+    private void delete(List<Conference> conferences) {
+        final ElementConfiguration config = configRef.get();
+        final ElementClient mec = new ElementClient(httpClient(config.getHttpClientId()), notNull(config.getMeetingHostUrl()), notNull(config.getAuthToken()));
+        for (final Conference conference : conferences) {
+            final String roomId = optExtendedParameterValue(conference.getExtendedParameters(), PARAMETER_ID);
+            if (null != roomId) {
+                try {
+                    mec.deleteMeeting(roomId);
+                } catch (OXException e) {
+                    LOG.error(e.getMessage(), e);
+                }
+            } else {
+                LOG.debug("{} not found, no meeting to delete", PARAMETER_ID);
+            }
+        }
+    }
+
+    private ManagedHttpClient httpClient(final String id) {
+        return httpClientService.getHttpClient(id);
+    }
+
+    /**
+     * Gets conferences of an event that are of type <i>element</i>.
+     * 
+     * @param event The event to get the conferences from
+     * @return The conferences, or an empty list if there are none
+     */
+    private static List<Conference> getConferences(@Nullable Event event) {
+        if (null == event) {
+            return notNull(Collections.emptyList());
+        }
+        List<Conference> conferences = event.getConferences();
+        if (null == conferences || conferences.isEmpty()) {
+            return notNull(Collections.emptyList());
+        }
+        List<Conference> matchingConferences = new ArrayList<Conference>(conferences.size());
+        for (Conference conference : event.getConferences()) {
+            String conferenceType = optExtendedParameterValue(conference.getExtendedParameters(), PARAMETER_TYPE);
+            if (Strings.isNotEmpty(conferenceType) && conferenceType.equals(CONFERENCE_TYPE)) {
+                matchingConferences.add(conference);
+            }
+        }
+        return matchingConferences;
+    }
+
+    /**
+     * Checks, if the two given conferences match according to their zoom id
+     *
+     * @param conf1 The first conference
+     * @param conf2 The second conference
+     * @return true if the zoom ids match, false otherwise
+     */
+    private static boolean matches(@Nullable Conference conf1, @Nullable Conference conf2) {
+        if (conf1 == null || conf2 == null) {
+            return false;
+        }
+
+        String param1 = optExtendedParameterValue(conf1.getExtendedParameters(), PARAMETER_ID);
+        return null != param1 && param1.equals(optExtendedParameterValue(conf2.getExtendedParameters(), PARAMETER_ID));
+    }
+
+    /**
+     * Checks if start or end date of the event have changed.
+     *
+     * @param update The Update
+     * @return true if start or end date have changed, false otherwise
+     */
+    private boolean timeHasChanged(UpdateResult update) {
+        return update.getUpdatedFields().contains(EventField.START_DATE) || update.getUpdatedFields().contains(EventField.END_DATE);
+    }
+
+    @Override
+    public Interests getInterests() {
+        return notNull(Reloadables.interestsForProperties(ElementConfiguration.allProperties()));
+    }
+
+    @Override
+    public void reloadConfiguration(@Nullable ConfigurationService configService) {
+        if (configService == null) {
+            return;
+        }
+        final ElementConfiguration newConfig;
+        try {
+            newConfig = ElementConfiguration.getConfig(configService);
+            if (Objects.equals(newConfig, configRef.get())) {
+                return;
+            }
+            configRef.getAndSet(newConfig);
+            LOG.info("applied configuration changes");
+        } catch (OXException e) {
+            LOG.error(e.getMessage(), e);
+        }
+    }
+
+}

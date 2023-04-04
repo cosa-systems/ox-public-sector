@@ -7,5 +7,8 @@ ciPipeline(
     ],
     obsCleanUp: false,
     build: false,
-    fetch: false
+    fetch: false,
+    integrationBuild: [
+        fetchTests: '**/*element*.xml'
+    ]
 )

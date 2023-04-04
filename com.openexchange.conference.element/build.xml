@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.openexchange.conference.element" basedir=".">
+    <import file="build-project.xml"/>
+    <target name="prepare" description="Copies the resources to the binary directory.">
+        <copy todir="${testBinDir}">
+            <fileset dir="test-resource"/>
+        </copy>
+    </target>
+</project>
+
+

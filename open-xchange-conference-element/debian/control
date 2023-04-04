@@ -1,0 +1,15 @@
+Source: open-xchange-conference-element
+Section: web
+Priority: optional
+Maintainer: Carsten Hoeger
+Build-Depends: cdbs (>= 0.4.53), debhelper (>= 7.0.1), ant-optional (>= 1.7.0), java8-sdk-headless,
+ open-xchange-core (>= @OXVERSION@), open-xchange-core (<< @NEXTMINOR@)
+Standards-Version: 3.9.8
+Homepage: http://www.open-xchange.com
+
+Package: open-xchange-conference-element
+Architecture: all
+Depends: ${misc:Depends},
+ open-xchange-core (>= @OXVERSION@), open-xchange-core (<< @NEXTMINOR@)
+Description: Calendar handler for Element Meetings
+
