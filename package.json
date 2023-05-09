@@ -1,0 +1,31 @@
+{
+    "name": "public-sector",
+    "version": "0.0.1",
+    "scripts": {
+        "lint": "for d in open-xchange-appsuite-*; do (cd $d; yarn --non-interactive --no-progress -s && yarn lint); done",
+        "release": "release-it",
+        "test": "echo Nothing to see here, move along please."
+    },
+    "devDependencies": {
+        "release-it": "*",
+        "@j-ulrich/release-it-regex-bumper": "*",
+        "@release-it/keep-a-changelog": "*",
+        "eslint": "^8.37.0",
+        "eslint-config-standard": "^17.0.0",
+        "eslint-plugin-chai-friendly": "^0.7.2",
+        "eslint-plugin-codeceptjs": "^1.3.0",
+        "eslint-plugin-import": "^2.27.5",
+        "eslint-plugin-license-header": "^0.2.0",
+        "eslint-plugin-n": "^15.7.0",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^6.1.1",
+        "lint-staged": "^11.1.2",
+        "simple-git-hooks": "^2.2.0"
+    },
+    "lint-staged": {
+        "*.{js,mjs,cjs}": "eslint --debug --ext js,cjs,mjs --cache --fix"
+    },
+    "simple-git-hooks": {
+        "pre-commit": "npx lint-staged"
+    }
+}

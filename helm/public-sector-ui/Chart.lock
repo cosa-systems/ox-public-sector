@@ -1,0 +1,6 @@
+dependencies:
+- name: ox-common
+  repository: oci://registry.open-xchange.com/common/charts
+  version: 1.0.22
+digest: sha256:bb1815c58309f151b15500b278d47e1f65c1e293e4d650276f945c877d01f318
+generated: "2022-12-29T09:49:47.880386+01:00"

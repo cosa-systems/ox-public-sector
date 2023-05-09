@@ -3,12 +3,12 @@ set -e
 
 if [ -z "$1" ]; then
     echo -n "Current environment: "
-    sed -nre '/"server":/s/^.*webmail\.(.*)\.at-univention.de.*$/\1/p' \
+    sed -nre '/"server":/s/^.*webmail\.(.*)\.souvap-univention.de.*$/\1/p' \
         grunt/local.conf.json
     exit
 fi
 
-DOMAIN="$1.at-univention.de"
+DOMAIN="$1.souvap-univention.de"
 CA="/home/vp/dev/vm/traefik/CA"
 
 if [ ! -f "$CA/pki/issued/portal.$DOMAIN.crt" ]; then

@@ -1,0 +1,16 @@
+include:
+  - project: 'sre/ci-building-blocks'
+    file: '/nodejs.yml'
+
+variables:
+  OX_COMPONENT: "public-sector-ui"
+
+build image:
+  variables:
+    KUBERNETES_MEMORY_REQUEST: 2Gi
+    KUBERNETES_MEMORY_LIMIT: 2Gi
+
+build e2e image:
+  variables:
+    KUBERNETES_MEMORY_REQUEST: 2Gi
+    KUBERNETES_MEMORY_LIMIT: 2Gi

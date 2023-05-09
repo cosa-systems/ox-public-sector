@@ -1,0 +1,67 @@
+# Default values for public-sector-ui
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+defaultRegistry: registry.gitlab.open-xchange.com
+
+image:
+  repository: extensions/public-sector
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  # We recommend to always specify resources after actually measuring the values under
+  # production-like circumstances.
+  limits:
+    cpu: 50m
+    memory: 96Mi
+  requests:
+    cpu: 5m
+    memory: 32Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+probe:
+  liveness:
+    enabled: true
+    periodSeconds: 10
+    failureThreshold: 15
+
+  readiness:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    failureThreshold: 2
+    timeoutSeconds: 5
+
+containerPort: 8080

@@ -1,0 +1,56 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ox.de_DE\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2022-04-27 11:43+0200\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
+msgid "Copy to clipboard"
+msgstr "In die Zwischenablage kopieren"
+
+#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
+msgid "Copy to description"
+msgstr "In Beschreibung kopieren"
+
+#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
+msgid "Copy to location field"
+msgstr "In Feld \"Ort\" kopieren"
+
+#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
+msgid "Could not create the conference room"
+msgstr "Konnte Konferenzraum nicht erzeugen"
+
+#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
+msgid "Could not delete the conference room"
+msgstr "Konnte Konferenzraum nicht löschen"
+
+#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
+msgid "Could not update the conference room"
+msgstr "Konnte Konferenzraum nicht aktualisieren"
+
+#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
+msgid "Creating conference room..."
+msgstr "Erstelle Konferenzraum..."
+
+#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
+msgid "Join video conference"
+msgstr "Videokonferenz beitreten"
+
+#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
+msgid "Link:"
+msgstr "Link:"
+
+#. %1$s is the meeting link
+#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
+#, c-format
+msgid "Link: %1$s"
+msgstr "Link: %1$s"
+
+#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
+msgid "Video conference"
+msgstr "Videokonferenz"

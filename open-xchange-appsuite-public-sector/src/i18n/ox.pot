@@ -1,0 +1,61 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector
+msgid "Could not create the conference room"
+msgstr ""
+
+#: src/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector
+msgid "Creating conference room..."
+msgstr ""
+
+#: src/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector
+msgid "Link:"
+msgstr ""
+
+#: src/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector
+msgid "Copy to location field"
+msgstr ""
+
+#: src/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector
+msgid "Copy to clipboard"
+msgstr ""
+
+#: src/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector
+msgid "Copy to description"
+msgstr ""
+
+#: src/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector
+msgid "Video conference"
+msgstr ""
+
+#: src/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector
+msgid "Could not update the conference room"
+msgstr ""
+
+#: src/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector
+msgid "Could not delete the conference room"
+msgstr ""
+
+#. %1$s is the meeting link
+#: src/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector
+#, c-format
+msgid "Link: %1$s"
+msgstr ""
+
+#: src/io.ox.public-sector/element/register.js
+#: module:io.ox.public-sector
+msgid "Join video conference"
+msgstr ""

@@ -1,0 +1,5 @@
+*
+!ui-docker-files
+!open-xchange-appsuite-*
+*/dist
+*/node_modules
