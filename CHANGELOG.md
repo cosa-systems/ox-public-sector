@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- Fixed conference logo in appointment edit dialog
 
 ## [1.0.1] - 2023-05-17
 - PBSR-640: Upgrade central navigation to OX 8

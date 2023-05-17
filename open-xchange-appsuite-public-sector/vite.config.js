@@ -127,13 +127,8 @@ export default defineConfig(({ mode }) => {
       }),
       // copy existing assets from source directory that are not imported in source code
       rollupPluginCopy({
-        targets: [
-          { src: './src/io.ox.public-sector/*.svg', dest: 'public/io.ox.public-sector/' },
-          {
-            src: './src/io.ox.public-sector/navigation/*.svg',
-            dest: 'public/io.ox.public-sector/navigation/'
-          }
-        ],
+        targets: [{ src: 'src/io.ox.public-sector/**/*.svg', dest: 'public/' }],
+        flatten: false,
         hook: 'buildStart'
       })
     ]
