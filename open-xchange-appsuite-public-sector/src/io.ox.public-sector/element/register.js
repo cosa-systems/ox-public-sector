@@ -222,9 +222,6 @@ ext.point('io.ox/calendar/conference-solutions').extend({
 
 })
 
-// move location to later position
-ext.point('io.ox/calendar/edit/section').replace({ id: 'location', index: 750 })
-
 confAPI.add('element', { joinLinkTitle: gt('Join video conference') })
 
 calendarAPI.on('beforedelete', function (list) {

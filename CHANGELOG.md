@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- OXUI-1291: Publish parts of the code under a different license
 
 ## [1.0.2] - 2023-05-17
 - Fixed conference logo in appointment edit dialog
