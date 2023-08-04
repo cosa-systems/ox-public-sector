@@ -7,7 +7,6 @@ import ox from '$/ox'
 
 import DisposableView from '$/io.ox/backbone/views/disposable'
 import calendarAPI from '$/io.ox/calendar/api'
-import confAPI from '$/io.ox/conference/api'
 import { getConference } from '$/io.ox/conference/util'
 import { createIcon } from '$/io.ox/core/components'
 import ext from '$/io.ox/core/extensions'
@@ -222,7 +221,8 @@ ext.point('io.ox/calendar/conference-solutions').extend({
 
 })
 
-confAPI.add('element', { joinLinkTitle: gt('Join video conference') })
+// Blocked by OXUIB-2478
+// confAPI.add('element', { joinLinkTitle: gt('Join video conference') })
 
 calendarAPI.on('beforedelete', function (list) {
   if (!_.isArray(list)) list = [list]
