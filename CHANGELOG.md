@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [1.0.3] - 2023-08-04
 - OXUI-1291: Publish parts of the code under a different license
 - PBSR-815: Video Conference integration does not work in 8.15
 
@@ -17,7 +19,8 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1]
 
-[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.2...main
+[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.3...main
+[1.0.3]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.2...1.0.3
 [1.0.2]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.1...1.0.2
 [1.0.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.0...1.0.1
 [1.0.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/middleware-public-sector-8.12.2...1.0.0

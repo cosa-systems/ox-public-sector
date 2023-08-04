@@ -1,6 +1,6 @@
 {
     "name": "public-sector",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "scripts": {
         "lint": "for d in open-xchange-appsuite-*; do (cd $d; yarn --non-interactive --no-progress -s && yarn lint); done",
         "release": "release-it",
