@@ -59,7 +59,7 @@ if ('document' in window) {
 }
 
 const LaunchersView = appcontrol.LaunchersView.extend({
-  initialize: function () {
+  initialize () {
     appcontrol.LaunchersView.prototype.initialize.apply(this, arguments)
 
     // Move dropdown to the left (align with right edge of launcher)
@@ -70,28 +70,27 @@ const LaunchersView = appcontrol.LaunchersView.extend({
     this.$toggle.empty()
       .append($(ox.ui.appIcons.launcher).attr('title', title))
   },
-  update: function () {
+  update () {
     this.$ul.empty()
-    const self = this
-    config.then(function (config) {
+    config.then(config => {
       // Add configured apps
-      _.each(config.categories, createCategory, self)
+      _.each(config.categories, createCategory, this)
 
       // draw custom launchers. Some items that appear in the launcher are not full apps, like the enterprise picker dialog
       ext.point('io.ox/core/appcontrol/customLaunchers').invoke('draw', this.$ul)
 
       // Check for compose apps on mobile
       if (!_.device('smartphone')) return
-      const closable = self.collection.where({ closable: true })
+      const closable = this.collection.where({ closable: true })
       if (!closable.length) return
 
       // Add compose apps
-      self.divider()
-      closable.forEach(function (model) {
-        self.$apps.append(new appcontrol.LauncherView({ model }).render().$el)
+      this.divider()
+      closable.forEach(model => {
+        this.$apps.append(new appcontrol.LauncherView({ model }).render().$el)
       })
-    }, function () {
-      appcontrol.LaunchersView.prototype.update.call(self)
+    }, () => {
+      appcontrol.LaunchersView.prototype.update.call(this)
     })
   }
 })
