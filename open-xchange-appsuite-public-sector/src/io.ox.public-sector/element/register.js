@@ -116,9 +116,7 @@ const ConferenceView = DisposableView.extend({
 
   renderError: function () {
     this.$el.append(
-      $('<div class="conference-logo error">').append(
-        $('<i class="fa fa-exclamation" aria-hidden="true">')
-      ),
+      createIcon('bi/exclamation.svg').addClass(['conference-logo', 'error']),
       $.txt(this.model.get('error'))
     )
     return this
