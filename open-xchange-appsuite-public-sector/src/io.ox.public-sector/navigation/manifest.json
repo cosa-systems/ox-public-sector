@@ -1,4 +1,4 @@
 {
     "namespace": "core",
-    "requires": "public-sector"
+    "requires": "public-sector && public-sector-navigation"
 }

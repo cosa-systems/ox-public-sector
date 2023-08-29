@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Work around OXUIB-2522: Enterprise picker sorts names backwards
 - Updated launcher for changes in 8.16
 - Changed color of the topbar border to #adb3bc
+- PBSR-665: Allow selective enabling of PublicSector features
 
 ## [1.0.3] - 2023-08-04
 - OXUI-1291: Publish parts of the code under a different license
