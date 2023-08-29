@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 - Removed local copy of logo.svg, we are using a remote OpenDesk logo now
 - PBSR-781: Missing error icon when adding video conference
 - Work around OXUIB-2522: Enterprise picker sorts names backwards
+- Updated launcher for changes in 8.16
+- Changed color of the topbar border to #adb3bc
 
 ## [1.0.3] - 2023-08-04
 - OXUI-1291: Publish parts of the code under a different license

@@ -42,21 +42,19 @@ function icon (url, launcher) {
 // Override launcher icon
 ox.ui.appIcons.launcher = icon('io.ox.public-sector/navigation/launcher.svg', true)
 
-if ('document' in window) {
-  config.then(function (config) {
-    // Override app icons
-    _.each(config.categories, function (category) {
-      _.each(category.entries, function (entry) {
-        if (entry.target !== oxTab) return
-        const id = getApp(entry.link)
-        const app = apps.get(id)
-        ox.ui.appIcons[id] = icon(entry.icon_url)
-        if (app) app.set('icon', ox.ui.appIcons[id])
-      })
+config.then(function (config) {
+  // Override app icons
+  _.each(config.categories, function (category) {
+    _.each(category.entries, function (entry) {
+      if (entry.target !== oxTab) return
+      const id = getApp(entry.link)
+      const app = apps.get(id)
+      ox.ui.appIcons[id] = icon(entry.icon_url)
+      if (app) app.set('icon', ox.ui.appIcons[id])
     })
-    ext.point('io.ox/core/main/icons').get('mapping').run()
   })
-}
+  ext.point('io.ox/core/main/icons').get('mapping').run()
+})
 
 const LaunchersView = appcontrol.LaunchersView.extend({
   initialize () {
@@ -69,14 +67,13 @@ const LaunchersView = appcontrol.LaunchersView.extend({
     const title = this.$toggle.children().attr('title')
     this.$toggle.empty()
       .append($(ox.ui.appIcons.launcher).attr('title', title))
-  },
-  update () {
     this.$ul.empty()
     config.then(config => {
       // Add configured apps
       _.each(config.categories, createCategory, this)
 
       // draw custom launchers. Some items that appear in the launcher are not full apps, like the enterprise picker dialog
+      this.divider()
       ext.point('io.ox/core/appcontrol/customLaunchers').invoke('draw', this.$ul)
 
       // Check for compose apps on mobile
@@ -114,38 +111,26 @@ function ownApp (entry) {
 }
 
 function foreignApp (entry) {
-  return $('<a tabindex="-1" role="menuitem" class="btn btn-toolbar btn-topbar">')
-    .attr({
-      href: entry.link,
-      target: entry.target
-    }).append(
+  return $('<button tabindex="-1" role="menuitem" class="btn btn-toolbar btn-topbar">')
+    .append(
       $('<div class="lcell">').append(
         $('<div class="icon-wrap flex-center">').append($(icon(entry.icon_url))),
         $('<div class="title">').text(entry.display_name)
       )
-    )
+    ).on('click', e => window.open(entry.link, entry.target))
 }
-
-ext.point('io.ox/core/appcontrol').replace({
-  id: 'left',
-  draw: function () {
-    const taskbar = $('<ul class="taskbar list-unstyled" role="toolbar">')
-    this.append(
-      $('<div id="io-ox-topleftbar" class="justify-start flex-grow me-auto">')
-        .append(taskbar)
-    )
-    ext.point('io.ox/core/appcontrol/left').invoke('draw', taskbar)
-  }
-})
 
 ext.point('io.ox/core/appcontrol/left').replace({
   id: 'launcher',
   draw: function () {
-    new LaunchersView({
+    const taskbar = $('<ul class="taskbar list-unstyled m-0" role="toolbar">')
+    const appLauncher = window.launchers = new LaunchersView({
       collection: apps,
       dontProcessOnMobile: true,
       margin: 12
-    }).render().$el.appendTo(this)
+    })
+    taskbar.append(appLauncher.render().$el)
+    this.append(taskbar)
   }
 })
 
