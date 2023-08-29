@@ -56,6 +56,14 @@ config.then(function (config) {
   ext.point('io.ox/core/main/icons').get('mapping').run()
 })
 
+// Work-around until 8.17
+appcontrol.LauncherView.prototype.updateTitle = function (model, newTitle) {
+  if (_.device('smartphone')) return
+  const $title = this.$icon?.find('.title')
+  $title.text(newTitle)
+  this.drawUpsellIcon($title)
+}
+
 const LaunchersView = appcontrol.LaunchersView.extend({
   initialize () {
     appcontrol.LaunchersView.prototype.initialize.apply(this, arguments)
