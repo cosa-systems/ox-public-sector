@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [2.0.0] - 2023-08-30
 - Removed local copy of logo.svg, we are using a remote OpenDesk logo now
 - PBSR-781: Missing error icon when adding video conference
 - Work around OXUIB-2522: Enterprise picker sorts names backwards
@@ -25,7 +27,8 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1]
 
-[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.3...main
+[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.0.0...main
+[2.0.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.3...2.0.0
 [1.0.3]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.2...1.0.3
 [1.0.2]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.1...1.0.2
 [1.0.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.0...1.0.1
