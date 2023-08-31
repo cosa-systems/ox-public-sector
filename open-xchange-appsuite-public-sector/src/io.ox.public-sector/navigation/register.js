@@ -75,6 +75,8 @@ const LaunchersView = appcontrol.LaunchersView.extend({
     const title = this.$toggle.children().attr('title')
     this.$toggle.empty()
       .append($(ox.ui.appIcons.launcher).attr('title', title))
+  },
+  update () {
     this.$ul.empty()
     config.then(config => {
       // Add configured apps

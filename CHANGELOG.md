@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- Fixed navigation menu after opening enterprise picker
 
 ## [2.0.0] - 2023-08-30
 - Removed local copy of logo.svg, we are using a remote OpenDesk logo now
