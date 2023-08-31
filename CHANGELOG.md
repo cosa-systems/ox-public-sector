@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [2.0.1] - 2023-08-31
 - Fixed navigation menu after opening enterprise picker
 
 ## [2.0.0] - 2023-08-30
@@ -28,7 +30,8 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1]
 
-[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.0.0...main
+[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.0.1...main
+[2.0.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.0.0...2.0.1
 [2.0.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.3...2.0.0
 [1.0.3]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.2...1.0.3
 [1.0.2]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.1...1.0.2
