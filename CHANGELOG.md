@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- Updated navigation menu for 8.19
 
 ## [2.0.1] - 2023-08-31
 - Fixed navigation menu after opening enterprise picker

@@ -56,14 +56,6 @@ config.then(function (config) {
   ext.point('io.ox/core/main/icons').get('mapping').run()
 })
 
-// Work-around until 8.17
-appcontrol.LauncherView.prototype.updateTitle = function (model, newTitle) {
-  if (_.device('smartphone')) return
-  const $title = this.$icon?.find('.title')
-  $title.text(newTitle)
-  this.drawUpsellIcon($title)
-}
-
 const LaunchersView = appcontrol.LaunchersView.extend({
   initialize () {
     appcontrol.LaunchersView.prototype.initialize.apply(this, arguments)
@@ -75,10 +67,13 @@ const LaunchersView = appcontrol.LaunchersView.extend({
     const title = this.$toggle.children().attr('title')
     this.$toggle.empty()
       .append($(ox.ui.appIcons.launcher).attr('title', title))
+
+    this.update()
   },
   update () {
-    this.$ul.empty()
     config.then(config => {
+      this.$ul.empty()
+
       // Add configured apps
       _.each(config.categories, createCategory, this)
 
@@ -89,13 +84,17 @@ const LaunchersView = appcontrol.LaunchersView.extend({
       // Check for compose apps on mobile
       if (!_.device('smartphone')) return
       const closable = this.collection.where({ closable: true })
-      if (!closable.length) return
 
-      // Add compose apps
-      this.divider()
-      closable.forEach(model => {
-        this.$apps.append(new appcontrol.LauncherView({ model }).render().$el)
-      })
+      if (closable.length) {
+        // Add compose apps
+        this.divider()
+        closable.forEach(model => {
+          this.$apps.append(new appcontrol.LauncherView({ model }).render().$el)
+        })
+      }
+
+      // Add menu on mobile
+      this.$ul.append(this.$menu)
     }, () => {
       appcontrol.LaunchersView.prototype.update.call(this)
     })
@@ -134,11 +133,7 @@ ext.point('io.ox/core/appcontrol/left').replace({
   id: 'launcher',
   draw: function () {
     const taskbar = $('<ul class="taskbar list-unstyled m-0" role="toolbar">')
-    const appLauncher = window.launchers = new LaunchersView({
-      collection: apps,
-      dontProcessOnMobile: true,
-      margin: 12
-    })
+    const appLauncher = window.launchers = new LaunchersView({ collection: apps })
     taskbar.append(appLauncher.render().$el)
     this.append(taskbar)
   }

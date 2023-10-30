@@ -46,12 +46,17 @@ div#io-ox-top-logo { margin: 0 16px; }
 
 .smartphone {
     #io-ox-appcontrol { height: 64px; }
-    #io-ox-core #io-ox-screens { top: 64px; }
     div#io-ox-top-logo { margin: 0 2px; }
-    .launcher-dropdown.dropdown-menu {
+    .launcher.open .launcher-dropdown.dropdown-menu {
         left: 12px !important;
         right: auto !important;
-        top: 64px !important;
         width: fit-content !important;
+
+        .menu {
+            border-top: 1px solid var(--border);
+            margin-top: 24px;
+            padding-inline-start: 4px;
+            padding-top: 24px;
+        }
     }
 }
