@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [2.1.0] - 2023-10-31
 - Updated navigation menu for 8.19
 
 ## [2.0.1] - 2023-08-31
@@ -31,7 +33,8 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1]
 
-[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.0.1...main
+[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.1.0...main
+[2.1.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.0.1...2.1.0
 [2.0.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.0.0...2.0.1
 [2.0.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.3...2.0.0
 [1.0.3]: https://gitlab.open-xchange.com/extensions/public-sector/compare/1.0.2...1.0.3
