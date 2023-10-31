@@ -14,10 +14,6 @@ msgid "Copy to clipboard"
 msgstr "In die Zwischenablage kopieren"
 
 #: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
-msgid "Copy to description"
-msgstr "In Beschreibung kopieren"
-
-#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
 msgid "Copy to location field"
 msgstr "In Feld \"Ort\" kopieren"
 
@@ -38,14 +34,10 @@ msgid "Creating conference room..."
 msgstr "Erstelle Konferenzraum..."
 
 #: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
-msgid "Join video conference"
-msgstr "Videokonferenz beitreten"
-
-#: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
 msgid "Link:"
 msgstr "Link:"
 
-#. %1$s is the meeting link
+#. %1$s contains the link to join the conference
 #: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
 #, c-format
 msgid "Link: %1$s"
@@ -54,3 +46,9 @@ msgstr "Link: %1$s"
 #: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
 msgid "Video conference"
 msgstr "Videokonferenz"
+
+#~ msgid "Copy to description"
+#~ msgstr "In Beschreibung kopieren"
+
+#~ msgid "Join video conference"
+#~ msgstr "Videokonferenz beitreten"

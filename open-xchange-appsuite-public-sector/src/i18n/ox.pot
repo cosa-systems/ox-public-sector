@@ -30,11 +30,6 @@ msgstr ""
 
 #: src/io.ox.public-sector/element/register.js
 #: module:io.ox.public-sector
-msgid "Copy to description"
-msgstr ""
-
-#: src/io.ox.public-sector/element/register.js
-#: module:io.ox.public-sector
 msgid "Video conference"
 msgstr ""
 
@@ -48,14 +43,9 @@ msgstr ""
 msgid "Could not delete the conference room"
 msgstr ""
 
-#. %1$s is the meeting link
+#. %1$s contains the link to join the conference
 #: src/io.ox.public-sector/element/register.js
 #: module:io.ox.public-sector
 #, c-format
 msgid "Link: %1$s"
-msgstr ""
-
-#: src/io.ox.public-sector/element/register.js
-#: module:io.ox.public-sector
-msgid "Join video conference"
 msgstr ""
