@@ -1,9 +1,14 @@
+:root:not(.smartphone) {
+    .launcher ul.launcher-dropdown.dropdown-menu {
+        padding: 12px 0;
+        width: fit-content !important;
+    }
+}
+
 .launcher ul.launcher-dropdown.dropdown-menu {
     flex-direction: column;
     min-width: 260px;
     max-width: 420px;
-    padding: 12px 0;
-    width: fit-content !important;
 
     .dropdown-header {
         color: #1f1f1f;
@@ -28,15 +33,6 @@
     }
 }
 
-.public-sector-launcher {
-    background-color: currentColor;
-//    -webkit-mask: url(apps/io.ox.public-sector/navigation/launcher.svg) center;
-//    mask: url(apps/io.ox.public-sector/navigation/launcher.svg) center;
-//    display: inline-block;
-    height: 20px;
-    width: 20px;
-}
-
 div#io-ox-appcontrol {
     border-bottom: 1px solid #adb3bc;
     height: 64px;
@@ -44,13 +40,15 @@ div#io-ox-appcontrol {
 
 div#io-ox-top-logo { margin: 0 16px; }
 
+.public-sector-launcher {
+    background-color: currentColor;
+    height: 20px;
+    width: 20px;
+}
+
 .smartphone {
-    #io-ox-appcontrol { height: 64px; }
-    div#io-ox-top-logo { margin: 0 2px; }
-    .launcher.open .launcher-dropdown.dropdown-menu {
-        left: 12px !important;
-        right: auto !important;
-        width: fit-content !important;
+    .launcher-dropdown {
+        width: 100%;
 
         .menu {
             border-top: 1px solid var(--border);

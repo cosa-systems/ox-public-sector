@@ -50,56 +50,59 @@ config.then(function (config) {
       const id = getApp(entry.link)
       const app = apps.get(id)
       ox.ui.appIcons[id] = icon(entry.icon_url)
-      if (app) app.set('icon', ox.ui.appIcons[id])
+      if (app) app.set({ icon: ox.ui.appIcons[id], title: entry.display_name })
     })
   })
   ext.point('io.ox/core/main/icons').get('mapping').run()
 })
 
-const LaunchersView = appcontrol.LaunchersView.extend({
-  initialize () {
-    appcontrol.LaunchersView.prototype.initialize.apply(this, arguments)
+const initialize = appcontrol.LaunchersView.prototype.initialize
+appcontrol.LaunchersView.prototype.initialize = function () {
+  initialize.apply(this, arguments)
 
+  if (!_.device('smartphone')) {
     // Move dropdown to the left (align with right edge of launcher)
     this.$ul.addClass('dropdown-menu-right')
-
-    // Patch toggle icon
-    const title = this.$toggle.children().attr('title')
-    this.$toggle.empty()
-      .append($(ox.ui.appIcons.launcher).attr('title', title))
-
-    this.update()
-  },
-  update () {
-    config.then(config => {
-      this.$ul.empty()
-
-      // Add configured apps
-      _.each(config.categories, createCategory, this)
-
-      // draw custom launchers. Some items that appear in the launcher are not full apps, like the enterprise picker dialog
-      this.divider()
-      ext.point('io.ox/core/appcontrol/customLaunchers').invoke('draw', this.$ul)
-
-      // Check for compose apps on mobile
-      if (!_.device('smartphone')) return
-      const closable = this.collection.where({ closable: true })
-
-      if (closable.length) {
-        // Add compose apps
-        this.divider()
-        closable.forEach(model => {
-          this.$apps.append(new appcontrol.LauncherView({ model }).render().$el)
-        })
-      }
-
-      // Add menu on mobile
-      this.$ul.append(this.$menu)
-    }, () => {
-      appcontrol.LaunchersView.prototype.update.call(this)
-    })
   }
-})
+
+  // Patch toggle icon
+  const title = this.$toggle.children().attr('title')
+  this.$toggle.empty()
+    .append($(ox.ui.appIcons.launcher).attr('title', title))
+
+  this.update()
+}
+
+const update = appcontrol.LaunchersView.prototype.update
+appcontrol.LaunchersView.prototype.update = function () {
+  config.then(config => {
+    this.$ul.empty()
+
+    // Add configured apps
+    _.each(config.categories, createCategory, this)
+
+    // draw custom launchers. Some items that appear in the launcher are not full apps, like the enterprise picker dialog
+    this.divider()
+    ext.point('io.ox/core/appcontrol/customLaunchers').invoke('draw', this.$ul)
+
+    // Check for compose apps on mobile
+    if (!_.device('smartphone')) return
+    const closable = this.collection.where({ closable: true })
+
+    if (closable.length) {
+      // Add compose apps
+      this.divider()
+      closable.forEach(model => {
+        this.$apps.append(new appcontrol.LauncherView({ model }).render().$el)
+      })
+    }
+
+    // Add menu on mobile
+    this.$ul.append(this.$menu)
+  }, () => {
+    update.call(this)
+  })
+}
 
 function createCategory (category) {
   const group = !!category.display_name
@@ -128,15 +131,3 @@ function foreignApp (entry) {
       )
     ).on('click', e => window.open(entry.link, entry.target))
 }
-
-ext.point('io.ox/core/appcontrol/left').replace({
-  id: 'launcher',
-  draw: function () {
-    const taskbar = $('<ul class="taskbar list-unstyled m-0" role="toolbar">')
-    const appLauncher = window.launchers = new LaunchersView({ collection: apps })
-    taskbar.append(appLauncher.render().$el)
-    this.append(taskbar)
-  }
-})
-
-ext.point('io.ox/core/appcontrol/right').disable('launcher')
