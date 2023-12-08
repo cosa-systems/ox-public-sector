@@ -181,10 +181,10 @@ const ConferenceView = DisposableView.extend({
     // This appointment is an exception of a series - do not change the room
     if (data.seriesId && (data.seriesId !== data.id)) return
     // This appointment changed to an exception of a series - do not change the room
-    if (data.seriesId && (data.seriesId === data.id) && !data.rrule) return
+    // if (data.seriesId && (data.seriesId === data.id) && !data.rrule) return
     // or check the model itself
     if (data.seriesId && this.appointment.mode === 'appointment') return
-    api.update(id, data).fail(function () {
+    api.update(id, data).then(null, function () {
       yell('error', gt('Could not update the conference room'))
     })
     this.off('dispose', this.discardMeeting)
@@ -231,7 +231,7 @@ calendarAPI.on('beforedelete', function (list) {
       calendarAPI.get(event).then(function (event) {
         const conference = getConference(event.get('conferences'))
         if (!conference || !conference.id) return
-        api.close(conference.id).fail(function () {
+        api.close(conference.id).then(null, function () {
           yell('error', gt('Could not delete the conference room'))
         })
       })

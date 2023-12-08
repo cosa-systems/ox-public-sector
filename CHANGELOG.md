@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- PBSR-754: Removal of recurrence is not synchronized to Element (#1756)
 
 ## [2.1.0] - 2023-10-31
 - Updated navigation menu for 8.19
