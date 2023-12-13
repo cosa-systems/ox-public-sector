@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Don't crash when a native module is disabled
+
 ## [2.2.0] - 2023-12-08
 - PBSR-754: Removal of recurrence is not synchronized to Element (#1756)
 - Updated mobile navigation menu for 8.20

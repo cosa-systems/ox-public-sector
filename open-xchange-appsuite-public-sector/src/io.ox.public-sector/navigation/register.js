@@ -115,6 +115,10 @@ function createCategory (category) {
 
 function ownApp (entry) {
   const model = apps.get(getApp(entry.link))
+  if (!model) {
+    if (ox.debug) console.warn('App not found for', entry.link)
+    return $()
+  }
   if (entry.display_name) model.set('title', entry.display_name)
   const launcher = new appcontrol.LauncherView({ model }).render()
   launcher.$el.find('.icon-background').remove()
