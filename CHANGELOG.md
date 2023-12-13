@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.2.1] - 2023-12-13
+
 - Don't crash when a native module is disabled
 
 ## [2.2.0] - 2023-12-08
@@ -39,7 +41,8 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1]
 
-[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.2.0...main
+[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.2.1...main
+[2.2.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.2.0...2.2.1
 [2.2.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.1.0...2.2.0
 [2.1.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.0.1...2.1.0
 [2.0.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.0.0...2.0.1
