@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- PBSRZITSH-46: Custom Labels for Address Book Fields Optional 01 - 20
+
 ## [2.2.1] - 2023-12-13
 
 - Don't crash when a native module is disabled

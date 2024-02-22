@@ -1,0 +1,4 @@
+{
+  "namespace": ["io.ox/contacts", "io.ox/contacts/detail", "io.ox/contacts/edit", "plugins/halo"],
+  "requires": "public-sector && public-sector-contactlabels"
+}

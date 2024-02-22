@@ -5,7 +5,7 @@
 | Story for original implementation | [PBSR-173](https://jira.open-xchange.com/browse/PBSR-173)
 | Code repository                   | <https://gitlab.open-xchange.com/extensions/public-sector>
 | Package(s)                        | `open-xchange-appsuite-public-sector`
-| Required capabilities             | `com.openexchange.capability.public-sector`
+| Required capabilities             | `com.openexchange.capability.public-sector`, `com.openexchange.capability.public-sector-navigation`
 | Available since                   | 7.10.6
 | Maintainers                       | Viktor Pracht
 
