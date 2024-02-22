@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.3.0] - 2024-02-22
+
 - PBSRZITSH-46: Custom Labels for Address Book Fields Optional 01 - 20
 
 ## [2.2.1] - 2023-12-13
@@ -43,7 +45,8 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1]
 
-[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.2.1...main
+[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.3.0...main
+[2.3.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.2.1...2.3.0
 [2.2.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.2.0...2.2.1
 [2.2.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.1.0...2.2.0
 [2.1.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.0.1...2.1.0
