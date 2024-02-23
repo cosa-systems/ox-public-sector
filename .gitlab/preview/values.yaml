@@ -1,0 +1,213 @@
+# override values from ui subchart since most of the time
+# you will be testing local images and not the ones in published helmcharts
+# (they may not even exist yet)
+public-sector-ui:
+  defaultRegistry: registry.gitlab.open-xchange.com
+  image:
+    repository: extensions/public-sector
+    pullPolicy: Always
+  imagePullSecrets:
+    - name: gitlab-registry-credentials
+
+plugins-ui:
+  defaultRegistry: registry.gitlab.open-xchange.com
+  image:
+    repository: registry.gitlab.open-xchange.com/extensions/plugins-ui
+  imagePullSecrets:
+    - name: gitlab-registry-credentials
+
+  ingress:
+    enabled: false
+
+global:
+  mysql:
+    host: &mysqlHost "preview-app-mysql"
+    auth:
+      password: &mysqlPassword "secret"
+      user: &mysqlUser "openexchange"
+
+# override values from appsuite in a box
+asbox:
+  replicaCount: 1
+
+  kube-infrastructure:
+
+    ##
+    ## MySQL chart configuration
+    ##
+    mysql:
+      enabled: true
+      auth:
+        rootPassword: &mysqlRootPassword "secret"
+        password: null
+        username: null
+
+    ##
+    ## Redis chart configuration
+    ##
+    redis:
+      enabled: true
+
+    redis-operator:
+      enabled: false
+
+    ##
+    ## MinIO chart configuration
+    ##
+    minio:
+      enabled: true
+      auth:
+        rootUser: &minioAccessKey "hob36g"
+        rootPassword: &minioSecretKey "6oqns99ilfkh855u"
+      defaultBuckets: "filestore,gdprstore,fileitemstore,guardstore"
+
+  appsuite-pro:
+    ################ MIDDLEWARE #################
+    core-mw:
+      serverName: "oxserver"
+
+      mysql:
+        # existingSecret: ""
+        database: "configdb"
+        auth:
+          rootPassword: *mysqlRootPassword
+
+      redis:
+        enabled: true
+        hosts: "preview-app-redis-master:6379"
+
+      masterAdmin: &masterAdmin "oxadminmaster"
+      masterPassword: &masterPassword "secret"
+
+      properties:
+        com.openexchange.demo.provisioning.masterAdminUser: *masterAdmin
+        com.openexchange.demo.provisioning.masterAdminPass: *masterPassword
+        com.openexchange.demo.provisioning.userList: "john.doe,jane.doe"
+        com.openexchange.demo.provisioning.userPassword: "secret"
+        com.openexchange.demo.provisioning.userLocale: "de_DE"
+        com.openexchange.demo.provisioning.userImage: "true"
+        com.openexchange.demo.provisioning.mailDomain: "example.com"
+        com.openexchange.demo.provisioning.numberOfContext: "1"
+        com.openexchange.demo.database.writeHost: *mysqlHost
+        com.openexchange.demo.database.writeUser: *mysqlUser
+        com.openexchange.demo.database.writePassword: *mysqlPassword
+        # S3 Filestore
+        com.openexchange.filestore.s3.filestore.endpoint: "http://preview-app-minio:9000"
+        com.openexchange.filestore.s3.filestore.accessKey: *minioAccessKey
+        com.openexchange.filestore.s3.filestore.secretKey: *minioSecretKey
+        com.openexchange.filestore.s3.gdprstore.endpoint: "http://preview-app-minio:9000"
+        com.openexchange.filestore.s3.gdprstore.accessKey: *minioAccessKey
+        com.openexchange.filestore.s3.gdprstore.secretKey: *minioSecretKey
+        com.openexchange.filestore.s3.fileitemstore.endpoint: "http://preview-app-minio:9000"
+        com.openexchange.filestore.s3.fileitemstore.accessKey: *minioAccessKey
+        com.openexchange.filestore.s3.fileitemstore.secretKey: *minioSecretKey
+        com.openexchange.filestore.s3.guardstore.endpoint: "http://preview-app-minio:9000"
+        com.openexchange.filestore.s3.guardstore.accessKey: *minioAccessKey
+        com.openexchange.filestore.s3.guardstore.secretKey: *minioSecretKey
+        # MAIL
+        com.openexchange.mail.mailServer: &mailServer "preview-app-dovecot"
+        com.openexchange.mail.transportServer: "preview-app-postfix"
+        com.openexchange.mail.filter.server: *mailServer
+        # Capabilities
+        com.openexchange.capability.public-sector: "true"
+        com.openexchange.capability.public-sector-contactlabels: "true"
+
+        # Drive
+        com.openexchange.drive.events.apn.ios.enabled: "false"
+        com.openexchange.drive.events.apn.macos.enabled: "false"
+        com.openexchange.drive.events.gcm.enabled: "false"
+        com.openexchange.capability.drive: "false"
+
+        com.openexchange.capability.switchboard: "false"
+        com.openexchange.capability.dynamic-theme: "false"
+        com.openexchange.capability.io-ox-login-custom-links: "false"
+        com.openexchange.capability.cbx: "false"
+        com.openexchange.capability.spam: "false"
+        com.openexchange.capability.subscription: "false"
+        com.openexchange.capability.edit_password: "false"
+        # Mail Push
+        com.openexchange.dovecot.doveadm.endpoints: "http://preview-app-dovecot:8080/doveadm/v1"
+        # Guard
+        com.openexchange.guard.guestSMTPServer: "preview-app-postfix"
+
+        # application passwords
+        com.openexchange.authentication.application.enabled: "true"
+        com.openexchange.authentication.application.appTypes: "mailapp,driveapp,caldav,carddav,webdav"
+        com.openexchange.authentication.application.storage.rdb.enabled: "false"
+
+      propertiesFiles:
+        /opt/open-xchange/etc/mailfilter.properties:
+          com.openexchange.mail.filter.masterPassword: "secret"
+
+      uiSettings:
+
+        # Plain strings
+        io.ox.public-sector//contactlabels/userfield01: "Department"
+        io.ox.public-sector//contactlabels/userfield03: "Team"
+
+        # Multiple translations
+        # British English
+        io.ox.public-sector//contactlabels/userfield02/en_GB: "Sub-department"
+        # Any other English variant, e.g. en_US
+        io.ox.public-sector//contactlabels/userfield02/en: "Subdepartment"
+        # German, e.g. de_DE, de_AT
+        io.ox.public-sector//contactlabels/userfield02/de: "Unterabteilung"
+        # Any other language, e.g. fr_FR
+        io.ox.public-sector//contactlabels/userfield02/default: "Sub-Department"
+
+      resources: &resources
+        requests:
+          cpu: 1
+          memory: 4Gi
+        limits:
+          cpu: 1
+          memory: 4Gi
+      initContainer:
+        resources: *resources
+
+    ################ WEB #################
+    plugins-ui:
+      enabled: true
+    core-documentconverter:
+      enabled: false
+    core-drive-help:
+      enabled: false
+    core-spellcheck:
+      enabled: false
+    core-imageconverter:
+      enabled: false
+    core-documents-collaboration:
+      enabled: false
+    core-guidedtours:
+      enabled: false
+    office-web:
+      enabled: false
+    office-user-guide:
+      enabled: false
+    switchboard:
+      enabled: false
+    guard-ui:
+      enabled: false
+    core-ui-middleware:
+      redis:
+        hosts:
+          - preview-app-redis-master:6379
+
+    istio:
+      enabled: true
+
+    ################ CacheService ################
+    core-cacheservice:
+      cacheService:
+        mysql:
+          database: "cacheservicedb"
+          auth:
+            rootPassword: *mysqlRootPassword
+            password: *mysqlPassword
+            user: *mysqlUser
+        s3ObjectStores:
+          - id: 1
+            endpoint: http://preview-app-minio:9000
+            bucketName: cacheservice
+            accessKey: *minioAccessKey
+            secretKey: *minioSecretKey

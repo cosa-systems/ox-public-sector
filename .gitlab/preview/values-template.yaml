@@ -1,0 +1,41 @@
+public-sector-ui:
+  image:
+    tag: "${TAG_NAME}"
+  # podAnnotations:
+  #   commit-ref: "${CI_COMMIT_SHORT_SHA}"
+  # deploymentAnnotations:
+  #   commit-ref: "${CI_COMMIT_SHORT_SHA}"
+
+asbox:
+  appsuite-pro:
+
+    core-mw:
+      image:
+        pullPolicy: IfNotPresent
+        repository: appsuite-core-internal/middleware-public-sector-pro
+        tag: &branchName stable-8.21
+
+    extraUIManifestURLs:
+      - http://%%RELEASE-NAME%%-plugins-ui/manifest.json
+      - http://%%RELEASE-NAME%%-${OX_COMPONENT}/manifest.json
+
+    istio:
+      ingressGateway:
+        name: istio-system/sre-default-gateway
+        tls:
+          enabled: true
+          existingSecret: ''
+        # used to access ui, do not use dots, if same project has multiple customers then differentiate hostnames
+        # not using $PREVIEW_APP_NAME (which is by project typically) but maybe something like "asbox-${NAMESPACE}.${KUBE_INGRESS_BASE_DOMAIN}"
+        hosts: &hosts
+          - ${PREVIEW_APP_NAME}.${KUBE_INGRESS_BASE_DOMAIN}
+      virtualServices:
+        appsuite:
+          hosts: *hosts
+        dav:
+          hosts:
+            - "dav-appsuite-asbox-${NAMESPACE}.${KUBE_INGRESS_BASE_DOMAIN}"
+
+    drive-client-windows-ox:
+      enabled: false
+      baseUrl: "http://appsuite-asbox-${NAMESPACE}.${KUBE_INGRESS_BASE_DOMAIN}"
