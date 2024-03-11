@@ -5,7 +5,7 @@
 | Story for original implementation | [PBSRZITSH-46](https://jira.open-xchange.com/browse/PBSRZITSH-46)
 | Code repository                   | <https://gitlab.open-xchange.com/extensions/public-sector>
 | Package(s)                        | `open-xchange-appsuite-public-sector`
-| Required capabilities             | `com.openexchange.capability.public-sector`<br>`com.openexchange.capability.public-sector-contactlabels`
+| Required capabilities             | `com.openexchange.capability.public-sector`, `com.openexchange.capability.public-sector-contactlabels`
 | Available since                   | 8.21
 | Maintainers                       | Viktor Pracht
 
