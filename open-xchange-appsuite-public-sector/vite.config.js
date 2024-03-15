@@ -41,7 +41,8 @@ export default defineConfig(({ mode }) => {
         input: {},
         output: {
           // set this, if you have dynamic imports to make sure, those chunks are in the correct folder
-          chunkFileNames: 'io.ox.public-sector/[name]-[hash].js'
+          entryFileNames: '[name].js',
+          chunkFileNames: 'io.ox.public-sector/[name].js'
         },
         // rollup-plugin-po2json uses rollup cache during the build process
         cache: true
@@ -101,6 +102,7 @@ export default defineConfig(({ mode }) => {
       vitePluginOxManifests({
         watch: true,
         manifestsAsEntryPoints: true,
+        entryPoints: ['src/io.ox.public-sector/ics.js'],
         // is just used in dev mode
         includeServerManifests: true,
         // add some metadata here to identify the ui plugin later on
