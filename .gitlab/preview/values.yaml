@@ -12,7 +12,7 @@ public-sector-ui:
 plugins-ui:
   defaultRegistry: registry.gitlab.open-xchange.com
   image:
-    repository: registry.gitlab.open-xchange.com/extensions/plugins-ui
+    repository: extensions/plugins-ui
   imagePullSecrets:
     - name: gitlab-registry-credentials
 
