@@ -6,8 +6,8 @@
 | Code repository                   | <https://gitlab.open-xchange.com/extensions/public-sector>
 | Package(s)                        | `open-xchange-appsuite-public-sector`
 | Required capabilities             | `com.openexchange.capability.public-sector`, `com.openexchange.capability.public-sector-contactlabels`
-| Available since                   | 8.21
-| Maintainers                       | Viktor Pracht
+| Available since                   | 8.21
+| Maintainers                       | Viktor Pracht
 
 ## Introduction
 

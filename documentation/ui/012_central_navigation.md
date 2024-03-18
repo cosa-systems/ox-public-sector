@@ -6,8 +6,8 @@
 | Code repository                   | <https://gitlab.open-xchange.com/extensions/public-sector>
 | Package(s)                        | `open-xchange-appsuite-public-sector`
 | Required capabilities             | `com.openexchange.capability.public-sector`, `com.openexchange.capability.public-sector-navigation`
-| Available since                   | 7.10.6
-| Maintainers                       | Viktor Pracht
+| Available since                   | 7.10.6
+| Maintainers                       | Viktor Pracht
 
 ## Introduction and Goal
 
@@ -120,7 +120,9 @@ Theoretically, this can happen entirely based on the link URL. Practically, this
 
 ## Configuration
 
-The Central Navigation is configured in the file `/opt/open-xchange/etc/settings/public-sector.properties`:
+The Central Navigation is configured in the file:
+
+`/opt/open-xchange/etc/settings/public-sector.properties`
 
 ```properties
 # Category identifier for OX App Suite
