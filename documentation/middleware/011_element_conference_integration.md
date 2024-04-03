@@ -12,7 +12,7 @@
 
 The following configuration options are available. Note that the bundle is disabled by default.
 
-| Key                               | Default                       | Description          |
+| Key                                                    | Default                       | Description          |
 | ------------------------------------------------------ | -------- | ----------------------- |
 | `com.openexchange.conference.element.enabled` | `false` | Enable the integration |
 | `com.openexchange.conference.element.meetingHostUrl` | *none* | URL of the element Meeting Bot |

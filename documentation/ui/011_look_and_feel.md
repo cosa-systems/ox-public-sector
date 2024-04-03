@@ -200,7 +200,9 @@ io.ox/dynamic-theme//folderHover=#ddd
 io.ox/dynamic-theme//folderSelectedFocus=@io-ox-dynamic-theme-mainColor
 ```
 
-In addition, to set the correct favicon, the theme is set in the file `/opt/open-xchange/etc/settings/public-sector.properties`:
+In addition, to set the correct favicon, the theme is set in the file
+
+`/opt/open-xchange/etc/settings/public-sector.properties`:
 
 ```properties
 # Set Phoenix theme
