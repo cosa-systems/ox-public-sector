@@ -4,7 +4,7 @@ mkdir dist
 manifest_files=()
 echo [] > dist/manifest.json
 for d in open-xchange-appsuite-* ; do
-    (cd $d && yarn --ignore-engines && yarn build)
+    (cd $d && pnpm i && pnpm build)
     if [ -f $d/dist/manifest.json ]; then
         cp -R $d/dist/* dist/
         manifest_files+=($d/dist/manifest.json)
