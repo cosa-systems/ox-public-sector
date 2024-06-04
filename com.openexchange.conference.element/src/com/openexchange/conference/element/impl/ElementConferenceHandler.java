@@ -24,6 +24,7 @@ package com.openexchange.conference.element.impl;
 
 import static com.openexchange.chronos.common.CalendarUtils.hasExternalOrganizer;
 import static com.openexchange.chronos.common.CalendarUtils.optExtendedParameterValue;
+import static com.openexchange.chronos.provider.composition.IDMangling.getUniqueFolderIds;
 import static com.openexchange.conference.element.impl.N.logger;
 import static com.openexchange.conference.element.impl.N.notNull;
 import java.time.ZoneId;
@@ -31,6 +32,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -39,16 +42,18 @@ import org.dmfs.rfc5545.DateTime;
 import org.slf4j.Logger;
 import com.openexchange.annotation.NonNullByDefault;
 import com.openexchange.annotation.Nullable;
+import com.openexchange.chronos.CalendarUser;
 import com.openexchange.chronos.Conference;
 import com.openexchange.chronos.Event;
 import com.openexchange.chronos.EventField;
 import com.openexchange.chronos.service.CalendarEvent;
 import com.openexchange.chronos.service.CalendarHandler;
 import com.openexchange.chronos.service.DeleteResult;
+import com.openexchange.chronos.service.TimestampedResult;
 import com.openexchange.chronos.service.UpdateResult;
 import com.openexchange.conference.element.ElementConfiguration;
-import com.openexchange.conference.element.impl.dto.ExternalData;
 import com.openexchange.conference.element.impl.dto.ElementMeeting;
+import com.openexchange.conference.element.impl.dto.ExternalData;
 import com.openexchange.conference.element.impl.dto.OXCalReference;
 import com.openexchange.config.ConfigurationService;
 import com.openexchange.config.Interests;
@@ -97,19 +102,82 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
             return;
         }
         LOG.debug("Event: {}", event.toString());
-
         for (UpdateResult update : event.getUpdates()) {
-            handleUpdate(notNull(update));
+            LOG.debug("UpdateResult: {}", update);
+            final List<String> list = getCalendarFolders(event, notNull(update));
+            if (null == list || list.isEmpty()) {
+                // no folders found, so we are either not owner or any other problem occurred
+                return;
+            }
+            // FIXME: moving an appointment to different calendar can result into a list of more than one folders...
+            if (LOG.isDebugEnabled() && list.size() > 1) {
+                LOG.debug("more than one folder, Calendar changed:");
+                list.forEach(le -> LOG.warn(le));
+            }
+            // looks like the first item in the list is always the new/updated calendar
+            handleUpdate(notNull(update), notNull(list.get(0)));
         }
         for (DeleteResult delete : event.getDeletions()) {
+            final List<String> list = getCalendarFolders(event, notNull(delete));
+            if (null == list || list.isEmpty()) {
+                // no folders found, so we are either not owner or any other problem occurred
+                return;
+            }
             handleDelete(notNull(delete));
         }
     }
 
     /**
+     * Determine Calendar folders affected by the given result type (supports {@link UpdateResult} and {@link DeleteResult})
+     * 
+     * @param event
+     * @param result
+     * @return
+     */
+    private @Nullable List<String> getCalendarFolders(CalendarEvent event, TimestampedResult result) {
+        final CalendarUser cu;
+        if (result instanceof UpdateResult) {
+            cu = ((UpdateResult) result).getUpdate().getCalendarUser();
+        } else if (result instanceof DeleteResult) {
+            cu = ((DeleteResult) result).getOriginal().getCalendarUser();
+        } else {
+            LOG.error("Unsupported type {}, this should not happen", result);
+            return null;
+        }
+        int ownerId = cu.getEntity();
+        LOG.debug("Owner of updated calendar: {}", ownerId);
+        List<String> list = getAffectedFoldersOfOwnerId(event, ownerId);
+        return list;
+    }
+
+    /**
+     * Determine the affected list of folders of given Calendar owner (from {@link PushCalendarHandler}).
+     * 
+     * @param event
+     * @param ownerId
+     * @return
+     */
+    private static @Nullable List<String> getAffectedFoldersOfOwnerId(CalendarEvent event, int ownerId) {
+        Map<Integer, List<String>> affectedFoldersPerUser = event.getAffectedFoldersPerUser();
+        if (null == affectedFoldersPerUser || affectedFoldersPerUser.isEmpty()) {
+            LOG.debug("no affected foldes found for event {}, with ownerId {}", event, ownerId);
+            return null;
+        }
+        for (Entry<Integer, List<String>> entry : affectedFoldersPerUser.entrySet()) {
+            final Integer entryKey = entry.getKey();
+            if (entryKey == ownerId) {
+                LOG.debug("affected folder id {} belongs to owner with id {}, returning unique folder ids", entryKey, ownerId);
+                return getUniqueFolderIds(event.getAccountId(), entry.getValue());
+            }
+        }
+        LOG.debug("no affected foldes found for event {}, with ownerId {}", event, ownerId);
+        return null;
+    }
+
+    /**
      * @param update
      */
-    private void handleUpdate(UpdateResult update) {
+    private void handleUpdate(UpdateResult update, String folderId) {
         if (hasExternalOrganizer(update.getOriginal())) {
             LOG.debug("No external organizer: {}", update.getOriginal());
             return;
@@ -140,10 +208,12 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
             }
             if (timeHasChanged(update)) {
                 LOG.debug("update {}", changed);
-                change(changed, notNull(update.getUpdate()));
+                change(changed, notNull(update.getUpdate()), folderId);
             }
-            LOG.debug("delete {}", removed);
-            delete(removed);
+            if (!removed.isEmpty()) {
+                LOG.debug("delete {}", removed);
+                delete(removed);
+            }
         }
 
     }
@@ -153,12 +223,13 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
      * @param update
      * @param event
      */
-    private void change(List<Conference> conferences, Event updatedEvent) {
+    private void change(List<Conference> conferences, Event updatedEvent, String folderId) {
         final ElementConfiguration config = configRef.get();
         final ElementClient mec = new ElementClient(httpClient(config.getHttpClientId()), notNull(config.getMeetingHostUrl()), notNull(config.getAuthToken()));
         for (Conference conf : conferences) {
             final String roomId = optExtendedParameterValue(conf.getExtendedParameters(), PARAMETER_ID);
             if (null != roomId) {
+                LOG.debug("updating meeting for room id {}", roomId);
                 try {
                     mec.updateMeeting(ElementMeeting.builder()
                         .withTargetRoomId(roomId)
@@ -167,7 +238,7 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
                         .withExternalData(ExternalData.builder()
                             .withIoDotOx(OXCalReference.builder()
                                 .withId(notNull(Integer.toString(conf.getId()))) // FIXME???
-                                .withFolder(notNull(updatedEvent.getFolderId())) // FIXME???
+                                .withFolder(folderId)
                                 .build())
                             .build())
                         .build());
@@ -175,7 +246,7 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
                     LOG.error(e.getMessage(), e);
                 }
             } else {
-                LOG.debug("{} not found, no meeting to update", PARAMETER_ID);
+                LOG.debug("no roomId found for {}, no meeting to update", PARAMETER_ID);
             }
         }
     }
@@ -194,7 +265,7 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
                 timeZone = ZoneId.systemDefault();
             }
         }
-        return notNull(ZonedDateTime.of(dt.getYear(), dt.getMonth(), dt.getDayOfMonth(), dt.getHours(), dt.getMinutes(), dt.getSeconds(), 0, timeZone));
+        return notNull(ZonedDateTime.of(dt.getYear(), dt.getMonth() + 1, dt.getDayOfMonth(), dt.getHours(), dt.getMinutes(), dt.getSeconds(), 0, timeZone));
     }
 
     /**
@@ -234,7 +305,7 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
     }
 
     private ManagedHttpClient httpClient(final String id) {
-        return httpClientService.getHttpClient(id);
+        return notNull(httpClientService.getHttpClient(id));
     }
 
     /**

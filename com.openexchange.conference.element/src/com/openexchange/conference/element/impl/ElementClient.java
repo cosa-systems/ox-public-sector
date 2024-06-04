@@ -39,6 +39,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONServices;
 import org.slf4j.Logger;
 import com.openexchange.annotation.NonNullByDefault;
 import com.openexchange.annotation.Nullable;
@@ -133,7 +134,7 @@ public class ElementClient {
                 final String responseString = r.lines().collect(Collectors.joining("\n"));
                 if (null != responseString && !Strings.isEmpty(responseString)) {
                     try {
-                        JSONObject json = new JSONObject(responseString);
+                        JSONObject json = JSONServices.parseObject(responseString);
                         if (json.hasAndNotNull("message")) {
                             return json.getString("message");
                         }
