@@ -37,23 +37,31 @@ import com.openexchange.java.Strings;
 @NonNullByDefault
 public class ElementConfiguration {
 
-    private static final String ENABLED_PROPERTY          = "com.openexchange.conference.element.enabled";
-    private static final String MEETING_HOST_URL_PROPERTY = "com.openexchange.conference.element.meetingHostUrl";
-    private static final String AUTH_TOKEN_PROPERTY       = "com.openexchange.conference.element.authToken";
-    private static final String HTTP_CLIENTID_PROPERTY    = "com.openexchange.conference.element.httpClientId";
-    private static final String HTTP_CLIENTID_DEFAULT     = "OX_ELEMENT";
+    private static final String ENABLED_PROPERTY           = "com.openexchange.conference.element.enabled";
+    private static final String MEETING_HOST_URL_PROPERTY  = "com.openexchange.conference.element.meetingHostUrl";
+    private static final String AUTH_TOKEN_PROPERTY        = "com.openexchange.conference.element.authToken";
+    private static final String MATRIX_LOGIN_URL_PROPERTY  = "com.openexchange.conference.element.matrixLoginUrl";
+    private static final String MATRIX_UUID_CLAIM_PROPERTY = "com.openexchange.conference.element.matrixUuidClaimName";
+    private static final String HTTP_CLIENTID_PROPERTY     = "com.openexchange.conference.element.httpClientId";
+    private static final String HTTP_CLIENTID_DEFAULT      = "OX_ELEMENT";
 
     @Nullable
     private final String  meetingHostUrl;
+    @Nullable
+    private final String  matrixLoginUrl;
+    @Nullable
+    private final String  matrixUuidClaimName;
     @Nullable
     private final String  authToken;
     private final String  httpClientId;
     private final boolean enabled;
 
-    private ElementConfiguration(boolean enabled, @Nullable String meetingHostUrl, @Nullable String authToken, String httpClientId) {
+    private ElementConfiguration(boolean enabled, @Nullable String meetingHostUrl, @Nullable String matrixLoginUrl, @Nullable String matrixUuidClaimName, @Nullable String authToken, String httpClientId) {
         super();
         this.enabled = enabled;
         this.meetingHostUrl = meetingHostUrl;
+        this.matrixLoginUrl = matrixLoginUrl;
+        this.matrixUuidClaimName = matrixUuidClaimName;
         this.authToken = authToken;
         this.httpClientId = httpClientId;
     }
@@ -62,6 +70,8 @@ public class ElementConfiguration {
         return new String[] {
             ENABLED_PROPERTY,
             MEETING_HOST_URL_PROPERTY,
+            MATRIX_LOGIN_URL_PROPERTY,
+            MATRIX_UUID_CLAIM_PROPERTY,
             AUTH_TOKEN_PROPERTY,
             HTTP_CLIENTID_PROPERTY };
     }
@@ -72,14 +82,21 @@ public class ElementConfiguration {
         if (Strings.isEmpty(meetingHostUrl) && enabled) {
             throw ElementExceptionCodes.CONFIGURATION_ERROR.create(MEETING_HOST_URL_PROPERTY);
         }
+        final String matrixLoginUrl = configService.getProperty(MATRIX_LOGIN_URL_PROPERTY);
+        if (Strings.isEmpty(matrixLoginUrl) && enabled) {
+            throw ElementExceptionCodes.CONFIGURATION_ERROR.create(MATRIX_LOGIN_URL_PROPERTY);
+        }
         final String authToken = configService.getProperty(AUTH_TOKEN_PROPERTY);
         if (Strings.isEmpty(authToken) && enabled) {
             throw ElementExceptionCodes.CONFIGURATION_ERROR.create(AUTH_TOKEN_PROPERTY);
         }
+        final String matrixUuidClaimName = configService.getProperty(MATRIX_UUID_CLAIM_PROPERTY);
 
         return new ElementConfiguration(
             enabled,
             meetingHostUrl,
+            matrixLoginUrl,
+            matrixUuidClaimName,
             authToken,
             notNull(configService.getProperty(HTTP_CLIENTID_PROPERTY, HTTP_CLIENTID_DEFAULT)));
     }
@@ -92,6 +109,14 @@ public class ElementConfiguration {
         return meetingHostUrl;
     }
 
+    public @Nullable String getMatrixLoginUrl() {
+        return matrixLoginUrl;
+    }
+
+    public @Nullable String getMatrixUuidClaimName() {
+        return matrixUuidClaimName;
+    }
+
     public @Nullable String getAuthToken() {
         return authToken;
     }
@@ -102,7 +127,8 @@ public class ElementConfiguration {
 
     @Override
     public String toString() {
-        return "ElementConfiguration [meetingHostUrl=" + meetingHostUrl + ", authToken=" + authToken + ", httpClientId=" + httpClientId + ", enabled=" + enabled + "]";
+        return "ElementConfiguration [meetingHostUrl=" + meetingHostUrl + ", matrixLoginUrl=" + matrixLoginUrl + ", matrixUuidClaimName=" + matrixUuidClaimName + ", authToken=" + authToken + ", httpClientId=" + httpClientId + ", enabled=" + enabled +
+            "]";
     }
 
     @SuppressWarnings("null")
@@ -113,15 +139,17 @@ public class ElementConfiguration {
         result = prime * result + ((authToken == null) ? 0 : authToken.hashCode());
         result = prime * result + (enabled ? 1231 : 1237);
         result = prime * result + ((httpClientId == null) ? 0 : httpClientId.hashCode());
+        result = prime * result + ((matrixLoginUrl == null) ? 0 : matrixLoginUrl.hashCode());
+        result = prime * result + ((matrixUuidClaimName == null) ? 0 : matrixUuidClaimName.hashCode());
         result = prime * result + ((meetingHostUrl == null) ? 0 : meetingHostUrl.hashCode());
         return result;
     }
 
     @SuppressWarnings({
-        "null",
-        "unused" })
+        "unused",
+        "null" })
     @Override
-    public boolean equals(@Nullable Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
@@ -140,6 +168,16 @@ public class ElementConfiguration {
             if (other.httpClientId != null)
                 return false;
         } else if (!httpClientId.equals(other.httpClientId))
+            return false;
+        if (matrixLoginUrl == null) {
+            if (other.matrixLoginUrl != null)
+                return false;
+        } else if (!matrixLoginUrl.equals(other.matrixLoginUrl))
+            return false;
+        if (matrixUuidClaimName == null) {
+            if (other.matrixUuidClaimName != null)
+                return false;
+        } else if (!matrixUuidClaimName.equals(other.matrixUuidClaimName))
             return false;
         if (meetingHostUrl == null) {
             if (other.meetingHostUrl != null)

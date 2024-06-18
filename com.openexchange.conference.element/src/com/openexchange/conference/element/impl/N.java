@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.openexchange.annotation.NonNullByDefault;
 import com.openexchange.annotation.Nullable;
+import com.openexchange.session.Session;
 
 /**
  * {@link N}
@@ -58,5 +59,18 @@ public enum N {
     @SuppressWarnings("null")
     public static Logger logger(final Class<?> c) {
         return LoggerFactory.getLogger(c);
+    }
+
+    /**
+     * Retrieve OAuth Token from session
+     * 
+     * @param session
+     * @return the token or null if not found
+     */
+    public static @Nullable String getOAuthTokenFromSession(Session session) {
+        if (session.containsParameter(Session.PARAM_OAUTH_ACCESS_TOKEN)) {
+            return (String) notNull(session.getParameter(Session.PARAM_OAUTH_ACCESS_TOKEN));
+        }
+        return null;
     }
 }

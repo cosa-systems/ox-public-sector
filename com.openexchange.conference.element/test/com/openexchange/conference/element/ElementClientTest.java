@@ -55,8 +55,6 @@ import com.openexchange.conference.element.impl.dto.ElementMeeting;
 import com.openexchange.conference.element.impl.dto.ExternalData;
 import com.openexchange.conference.element.impl.dto.OXCalReference;
 import com.openexchange.exception.OXException;
-import com.openexchange.rest.client.httpclient.ManagedHttpClient;
-import com.openexchange.rest.client.httpclient.SimHttpClientService;
 
 /**
  * {@link ElementClientTest}
@@ -68,12 +66,6 @@ import com.openexchange.rest.client.httpclient.SimHttpClientService;
 public class ElementClientTest extends AbstractElementTest {
 
     private static final String MEETING_UPDATE_JSON = "MeetingUpdate.json";
-    private static final String TOKEN               = "verysecrettoken";
-    private static final int    MOCK_HTTP_PORT      = 3333;
-    @SuppressWarnings("null")
-    private static final String AUTH_HEADER         = format("Bearer %s", TOKEN);
-    @SuppressWarnings("null")
-    private static final String MOCK_HTTP_URL       = format("http://localhost:%d", MOCK_HTTP_PORT);
 
     @SuppressWarnings("null")
     private WireMockServer mockServer;
@@ -199,11 +191,6 @@ public class ElementClientTest extends AbstractElementTest {
         });
         assertThat(thrown).isInstanceOf(OXException.class);
         assertThat(thrown.getMessage()).contains(errorMessage);
-    }
-
-    private ManagedHttpClient getHttpClient() {
-        final SimHttpClientService shcs = new SimHttpClientService();
-        return shcs.getHttpClient("TESTCLIENT");
     }
 
 }

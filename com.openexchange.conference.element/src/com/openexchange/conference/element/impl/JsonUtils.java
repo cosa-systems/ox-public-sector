@@ -24,13 +24,18 @@ package com.openexchange.conference.element.impl;
 import static com.openexchange.conference.element.impl.N.logger;
 import static com.openexchange.conference.element.impl.N.notNull;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.TimeZone;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONValue;
 import org.slf4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.openexchange.annotation.NonNullByDefault;
+import com.openexchange.annotation.Nullable;
 
 /**
  * {@link JsonUtils}
@@ -62,5 +67,35 @@ public enum JsonUtils {
                 .defaultDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.XXX"))
                 .build()
                 .writeValueAsString(instance));
+    }
+
+    public static @Nullable String getUserUuidClaimValue(String accessToken, String claimName) {
+        final String[] chunks = accessToken.split("\\.");
+        if (chunks.length < 2) {
+            LOG.error("invalid access token: \"{}\"", accessToken);
+            return null;
+        }
+        final Base64.Decoder decoder = Base64.getUrlDecoder();
+        final String payload;
+        try {
+            payload = new String(decoder.decode(chunks[1]));
+        } catch (Exception e) {
+            LOG.error("unable to decode access token payload: \"{}\": {}", chunks[1], e.getMessage(), e);
+            return null;
+        }
+        try {
+            final JSONValue json = JSONObject.parse(payload);
+            final JSONObject jobj = json.toObject();
+            if (null != jobj && jobj.hasAndNotNull(claimName)) {
+                final String claimValue = (String) jobj.get(claimName);
+                LOG.debug("value of claim with name {} = \"{}\"", claimName, claimValue);
+                return claimValue;
+            }
+        } catch (JSONException e) {
+            LOG.error("unable to get claim name \"{}\" from payload \"{}\": {}", claimName, payload, e.getMessage(), e);
+            return null;
+        }
+        LOG.error("unable to get claim name \"{}\" from payload \"{}\": {}", claimName, payload);
+        return null;
     }
 }

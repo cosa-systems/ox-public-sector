@@ -25,6 +25,8 @@ package com.openexchange.conference.element.impl;
 import static com.openexchange.chronos.common.CalendarUtils.hasExternalOrganizer;
 import static com.openexchange.chronos.common.CalendarUtils.optExtendedParameterValue;
 import static com.openexchange.chronos.provider.composition.IDMangling.getUniqueFolderIds;
+import static com.openexchange.conference.element.impl.JsonUtils.getUserUuidClaimValue;
+import static com.openexchange.conference.element.impl.N.getOAuthTokenFromSession;
 import static com.openexchange.conference.element.impl.N.logger;
 import static com.openexchange.conference.element.impl.N.notNull;
 import java.time.ZoneId;
@@ -63,6 +65,7 @@ import com.openexchange.exception.OXException;
 import com.openexchange.java.Strings;
 import com.openexchange.rest.client.httpclient.HttpClientService;
 import com.openexchange.rest.client.httpclient.ManagedHttpClient;
+import com.openexchange.session.Session;
 
 /**
  * {@link ElementConferenceHandler}
@@ -71,6 +74,11 @@ import com.openexchange.rest.client.httpclient.ManagedHttpClient;
  */
 @NonNullByDefault
 public class ElementConferenceHandler implements CalendarHandler, Reloadable {
+
+    /**
+     * MATRIX_TOKEN_SESSION_PARAMETER
+     */
+    private static final String MATRIX_TOKEN_SESSION_PARAMETER = "c.o.conference.element.matrixToken";
 
     private static final Logger LOG = logger(ElementConferenceHandler.class);
 
@@ -97,11 +105,41 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
         if (null == event) {
             return;
         }
-        if (!configRef.get().isEnabled()) {
+        final ElementConfiguration config = configRef.get();
+        if (!config.isEnabled()) {
             LOG.debug("ElementConferenceHandler not enabled");
             return;
         }
         LOG.debug("Event: {}", event.toString());
+
+        final Session session = event.getSession();
+        if (null == session) {
+            LOG.error("unable to retrieve session for context={}, account={}", event.getContextId(), event.getAccountId());
+            return;
+        }
+
+        final String matrixUserIdentifier = getMatrixUserIdentifier(config, session);
+        if (null == matrixUserIdentifier) {
+            return;
+        }
+
+        String matrixToken;
+        {
+            String tmpMatrixToken = (String) session.getParameter(MATRIX_TOKEN_SESSION_PARAMETER);
+            if (null == tmpMatrixToken) {
+                final MatrixClient mc = new MatrixClient(httpClient(config.getHttpClientId()), notNull(config.getMatrixLoginUrl()), notNull(config.getAuthToken()));
+                try {
+                    tmpMatrixToken = mc.getLoginToken(matrixUserIdentifier);
+                    LOG.debug("storing matrix token {} into session", tmpMatrixToken);
+                    session.setParameter(MATRIX_TOKEN_SESSION_PARAMETER, tmpMatrixToken);
+                } catch (OXException e) {
+                    LOG.error("unable to retrieve matrix token from {} for context={}, user={}", config.getMatrixLoginUrl(), event.getContextId(), session.getUserId());
+                    return;
+                }
+            }
+            matrixToken = tmpMatrixToken;
+        }
+
         for (UpdateResult update : event.getUpdates()) {
             LOG.debug("UpdateResult: {}", update);
             final List<String> list = getCalendarFolders(event, notNull(update));
@@ -115,7 +153,7 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
                 list.forEach(le -> LOG.warn(le));
             }
             // looks like the first item in the list is always the new/updated calendar
-            handleUpdate(notNull(update), notNull(list.get(0)));
+            handleUpdate(notNull(update), notNull(list.get(0)), matrixToken);
         }
         for (DeleteResult delete : event.getDeletions()) {
             final List<String> list = getCalendarFolders(event, notNull(delete));
@@ -123,8 +161,34 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
                 // no folders found, so we are either not owner or any other problem occurred
                 return;
             }
-            handleDelete(notNull(delete));
+            handleDelete(notNull(delete), matrixToken);
         }
+    }
+
+    /**
+     * Get Matrix User Identifier. Will use the OX Login name from session in case MatrixUuidClaimName is not configured
+     * or extract it from the access token as stored in the session using the configured MatrixUuidClaimName
+     * 
+     * @param config
+     * @param session
+     * @return the identifier or null in case of errors
+     */
+    private @Nullable String getMatrixUserIdentifier(final ElementConfiguration config, final Session session) {
+        final String token = getOAuthTokenFromSession(session);
+        if (null == token) {
+            LOG.error("unable to retrieve oauth token from session for context={}, user={}", session.getContextId(), session.getUserId());
+            return null;
+        }
+        final String matrixUserIdentifier;
+        final String matrixUuidClaimName = config.getMatrixUuidClaimName();
+        if (null != matrixUuidClaimName) {
+            LOG.debug("reading matrix user id from claim \"{}\"", matrixUuidClaimName);
+            matrixUserIdentifier = getUserUuidClaimValue(token, matrixUuidClaimName);
+        } else {
+            LOG.debug("reading matrix user id from session");
+            matrixUserIdentifier = session.getLoginName();
+        }
+        return matrixUserIdentifier;
     }
 
     /**
@@ -177,7 +241,7 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
     /**
      * @param update
      */
-    private void handleUpdate(UpdateResult update, String folderId) {
+    private void handleUpdate(UpdateResult update, String folderId, String matrixToken) {
         if (hasExternalOrganizer(update.getOriginal())) {
             LOG.debug("No external organizer: {}", update.getOriginal());
             return;
@@ -194,7 +258,7 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
             LOG.debug("new appointment, nothing to update");
         } else if (updateConferences.isEmpty()) {
             LOG.debug("remove {}", originalConferences);
-            delete(originalConferences);
+            delete(originalConferences, matrixToken);
         } else {
             // calculate diffs. Again, "added" is not relevant
             List<Conference> removed = new ArrayList<>(originalConferences);
@@ -208,11 +272,11 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
             }
             if (timeHasChanged(update)) {
                 LOG.debug("update {}", changed);
-                change(changed, notNull(update.getUpdate()), folderId);
+                change(changed, notNull(update.getUpdate()), folderId, matrixToken);
             }
             if (!removed.isEmpty()) {
                 LOG.debug("delete {}", removed);
-                delete(removed);
+                delete(removed, matrixToken);
             }
         }
 
@@ -223,9 +287,9 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
      * @param update
      * @param event
      */
-    private void change(List<Conference> conferences, Event updatedEvent, String folderId) {
+    private void change(List<Conference> conferences, Event updatedEvent, String folderId, String matrixToken) {
         final ElementConfiguration config = configRef.get();
-        final ElementClient mec = new ElementClient(httpClient(config.getHttpClientId()), notNull(config.getMeetingHostUrl()), notNull(config.getAuthToken()));
+        final ElementClient mec = new ElementClient(httpClient(config.getHttpClientId()), notNull(config.getMeetingHostUrl()), matrixToken);
         for (Conference conf : conferences) {
             final String roomId = optExtendedParameterValue(conf.getExtendedParameters(), PARAMETER_ID);
             if (null != roomId) {
@@ -271,7 +335,7 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
     /**
      * @param delete
      */
-    private void handleDelete(DeleteResult delete) {
+    private void handleDelete(DeleteResult delete, String matrixToken) {
         Event original = delete.getOriginal();
         if (hasExternalOrganizer(original)) {
             LOG.debug("No external organizer: {}", original);
@@ -279,7 +343,7 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
         }
 
         List<Conference> conferences = getConferences(original);
-        delete(conferences);
+        delete(conferences, matrixToken);
     }
 
     /**
@@ -287,9 +351,9 @@ public class ElementConferenceHandler implements CalendarHandler, Reloadable {
      * @param original
      * @param event
      */
-    private void delete(List<Conference> conferences) {
+    private void delete(List<Conference> conferences, String matrixToken) {
         final ElementConfiguration config = configRef.get();
-        final ElementClient mec = new ElementClient(httpClient(config.getHttpClientId()), notNull(config.getMeetingHostUrl()), notNull(config.getAuthToken()));
+        final ElementClient mec = new ElementClient(httpClient(config.getHttpClientId()), notNull(config.getMeetingHostUrl()), matrixToken);
         for (final Conference conference : conferences) {
             final String roomId = optExtendedParameterValue(conference.getExtendedParameters(), PARAMETER_ID);
             if (null != roomId) {

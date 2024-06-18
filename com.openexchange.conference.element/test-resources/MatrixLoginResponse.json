@@ -1,0 +1,11 @@
+{
+  "user_id": "@8b40a284-879c-103e-8d67-87282cd6b66a:ox-viktor.opendesk.site",
+  "access_token": "syt_OGI0MGEyODQtODc5Yy0xMDNlLThkNjctODcyODJjZDZiNjZh_QRyveQCyjukAhnGwGtOv_4Jb3Tp",
+  "home_server": "ox-viktor.opendesk.site",
+  "device_id": "CXRCGPSDGK",
+  "well_known": {
+    "m.homeserver": {
+      "base_url": "https://matrix.ox-viktor.opendesk.site/"
+    }
+  }
+}
