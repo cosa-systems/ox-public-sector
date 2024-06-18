@@ -116,7 +116,8 @@ public class ElementClient {
             return;
         }
         final StatusLine sl = response.getStatusLine();
-        if (sl.getStatusCode() != 200) {
+        final int statusCode = sl.getStatusCode();
+        if (statusCode < 200 || statusCode > 201) {
             final String errorMessage;
             final Header contentType = response.getFirstHeader(HttpHeaders.CONTENT_TYPE);
             if (null != contentType && contentType.getValue().equalsIgnoreCase(ContentType.APPLICATION_JSON.toString())) {

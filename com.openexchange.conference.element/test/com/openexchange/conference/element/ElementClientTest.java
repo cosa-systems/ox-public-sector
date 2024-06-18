@@ -25,6 +25,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.ok;
+import static com.github.tomakehurst.wiremock.client.WireMock.status;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.put;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
@@ -107,7 +108,7 @@ public class ElementClientTest extends AbstractElementTest {
             post("/v1/meeting/close")
                 .withHeader(HttpHeaders.AUTHORIZATION, equalTo(AUTH_HEADER))
                 .withRequestBody(equalToJson(jsonData.toString()))
-                .willReturn(ok()));
+                .willReturn(status(201)));
         final ElementClient mec = new ElementClient(getHttpClient(), MOCK_HTTP_URL, TOKEN);
         mec.deleteMeeting(targetRoomId);
     }
