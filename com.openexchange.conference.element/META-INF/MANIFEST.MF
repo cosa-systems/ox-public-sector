@@ -5,7 +5,7 @@ Bundle-SymbolicName: com.openexchange.conference.element
 Bundle-Version: 8
 Bundle-Activator: com.openexchange.conference.element.osgi.Activator
 Bundle-Vendor: Open-Xchange Software GmbH
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: com.openexchange.conference.element
 Bundle-ActivationPolicy: lazy
 Import-Package: com.fasterxml.jackson.annotation,
