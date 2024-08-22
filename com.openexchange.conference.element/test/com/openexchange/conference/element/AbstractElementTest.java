@@ -21,6 +21,7 @@
 
 package com.openexchange.conference.element;
 
+import static com.openexchange.conference.element.impl.N.f;
 import static com.openexchange.conference.element.impl.N.logger;
 import static com.openexchange.conference.element.impl.N.notNull;
 import static java.lang.String.format;
@@ -58,6 +59,12 @@ public abstract class AbstractElementTest {
         // Override Timezone to ensure all Tests are being executed in Europe/Berlin Timezone since that's where
         // MeetingUpdate.json has been generated
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Berlin"));
+    }
+
+    abstract int getMockPort();
+
+    protected String getMockHttpUrl() {
+        return f("http://localhost:%d", getMockPort());
     }
 
     protected String loadFile(final String name) throws FileNotFoundException, IOException {

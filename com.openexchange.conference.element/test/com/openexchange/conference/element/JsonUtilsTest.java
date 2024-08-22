@@ -101,4 +101,9 @@ public class JsonUtilsTest extends AbstractElementTest {
             "opendesk_useruuid");
         assertThat(userId).isNotNull().isEqualTo("d2ee2ece-b782-103e-9800-914bb3398316");
     }
+
+    @Override
+    int getMockPort() {
+        return 0;
+    }
 }

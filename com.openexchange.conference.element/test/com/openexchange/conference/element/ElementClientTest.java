@@ -73,13 +73,18 @@ public class ElementClientTest extends AbstractElementTest {
 
     @BeforeAll
     public void startWiremock() {
-        mockServer = new WireMockServer(options().port(MOCK_HTTP_PORT));
+        mockServer = new WireMockServer(options().dynamicPort());
         mockServer.start();
     }
 
     @AfterAll
     public void stopWiremock() {
         mockServer.stop();
+    }
+
+    @Override
+    int getMockPort() {
+        return mockServer.port();
     }
 
     @Test
@@ -91,14 +96,14 @@ public class ElementClientTest extends AbstractElementTest {
                 .withHeader(HttpHeaders.AUTHORIZATION, equalTo(AUTH_HEADER))
                 .withRequestBody(equalToJson(jsonData))
                 .willReturn(ok()));
-        final ElementClient mec = new ElementClient(getHttpClient(), MOCK_HTTP_URL, TOKEN);
+        final ElementClient mec = new ElementClient(getHttpClient(), getMockHttpUrl(), TOKEN);
         final ElementMeeting fromJson = JsonUtils.fromJson(jsonData, ElementMeeting.class);
         LOG.info("MAPPED= {}", fromJson);
         mec.updateMeeting(fromJson);
     }
 
     @Test
-    public void testDeleteMeeting() throws JsonMappingException, JsonProcessingException, FileNotFoundException, IOException, JSONException, OXException  {
+    public void testDeleteMeeting() throws JsonMappingException, JsonProcessingException, FileNotFoundException, IOException, JSONException, OXException {
         final ElementMeeting mu = JsonUtils.fromJson(loadFile(MEETING_UPDATE_JSON), ElementMeeting.class);
         final String targetRoomId = mu.getTargetRoomId();
         final JSONObject jsonData = new JSONObject()
@@ -109,7 +114,7 @@ public class ElementClientTest extends AbstractElementTest {
                 .withHeader(HttpHeaders.AUTHORIZATION, equalTo(AUTH_HEADER))
                 .withRequestBody(equalToJson(jsonData.toString()))
                 .willReturn(status(201)));
-        final ElementClient mec = new ElementClient(getHttpClient(), MOCK_HTTP_URL, TOKEN);
+        final ElementClient mec = new ElementClient(getHttpClient(), getMockHttpUrl(), TOKEN);
         mec.deleteMeeting(targetRoomId);
     }
 
@@ -127,7 +132,7 @@ public class ElementClientTest extends AbstractElementTest {
                     .withStatus(HttpStatus.SC_BAD_REQUEST)
                     .withHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString())
                     .withBody(jsonData.toString())));
-        final ElementClient mec = new ElementClient(getHttpClient(), MOCK_HTTP_URL, TOKEN);
+        final ElementClient mec = new ElementClient(getHttpClient(), getMockHttpUrl(), TOKEN);
         final Throwable thrown = catchThrowable(() -> {
             mec.deleteMeeting("doesnotmatter");
         });
@@ -149,7 +154,7 @@ public class ElementClientTest extends AbstractElementTest {
                     .withStatus(HttpStatus.SC_FORBIDDEN)
                     .withHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString())
                     .withBody(jsonData.toString())));
-        final ElementClient mec = new ElementClient(getHttpClient(), MOCK_HTTP_URL, TOKEN);
+        final ElementClient mec = new ElementClient(getHttpClient(), getMockHttpUrl(), TOKEN);
         final Throwable thrown = catchThrowable(() -> {
             mec.deleteMeeting("doesnotmatter");
         });
@@ -186,7 +191,7 @@ public class ElementClientTest extends AbstractElementTest {
                     .withStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .withHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString())
                     .withBody(jsonData.toString())));
-        final ElementClient mec = new ElementClient(getHttpClient(), MOCK_HTTP_URL, TOKEN);
+        final ElementClient mec = new ElementClient(getHttpClient(), getMockHttpUrl(), TOKEN);
         final Throwable thrown = catchThrowable(() -> {
             mec.updateMeeting(fakeMeeting);
         });

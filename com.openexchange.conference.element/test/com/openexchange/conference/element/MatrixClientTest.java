@@ -68,6 +68,11 @@ public class MatrixClientTest extends AbstractElementTest {
         mockServer.stop();
     }
 
+    @Override
+    int getMockPort() {
+        return mockServer.port();
+    }
+
     @Test
     public void testGetLoginToken() throws FileNotFoundException, IOException, OXException {
         final String jsonData = loadFile("MatrixLoginResponse.json");
@@ -88,7 +93,7 @@ public class MatrixClientTest extends AbstractElementTest {
                     .withStatus(HttpStatus.SC_OK)
                     .withHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString())
                     .withBody(jsonData.toString())));
-        final MatrixClient mec = new MatrixClient(getHttpClient(), MOCK_HTTP_URL, TOKEN);
+        final MatrixClient mec = new MatrixClient(getHttpClient(), getMockHttpUrl(), TOKEN);
         String loginToken = mec.getLoginToken(userIdentifier);
         assertThat(loginToken).isNotNull().isEqualTo("syt_OGI0MGEyODQtODc5Yy0xMDNlLThkNjctODcyODJjZDZiNjZh_QRyveQCyjukAhnGwGtOv_4Jb3Tp");
     }
