@@ -61,7 +61,6 @@ asbox:
       auth:
         rootUser: &minioAccessKey "hob36g"
         rootPassword: &minioSecretKey "6oqns99ilfkh855u"
-      defaultBuckets: "filestore,gdprstore,fileitemstore,guardstore"
 
   appsuite-pro:
     ################ MIDDLEWARE #################
@@ -127,6 +126,14 @@ asbox:
         com.openexchange.capability.spam: "false"
         com.openexchange.capability.subscription: "false"
         com.openexchange.capability.edit_password: "false"
+        com.openexchange.capability.document_preview: "false"
+        com.openexchange.capability.text: "false"
+        com.openexchange.capability.presentation: "false"
+        com.openexchange.capability.spreadsheet: "false"
+        com.openexchange.capability.presenter: "false"
+        com.openexchange.capability.guard-docs: "false"
+        com.openexchange.office.spellcheck.remoteURL: ""
+
         # Mail Push
         com.openexchange.dovecot.doveadm.endpoints: "http://preview-app-dovecot:8080/doveadm/v1"
         # Guard
@@ -145,11 +152,19 @@ asbox:
         status:
           open-xchange-authentication-databse: disabled
           open-xchange-authentication-masterpassword: enabled
+          open-xchange-documentconverter-api: disabled
+          open-xchange-documentconverter-client: disabled
+          open-xchange-imageconverter-client: disabled
+          open-xchange-documents-templates: disabled
+          open-xchange-documents-backend: disabled
+          open-xchange-documents-monitoring: disabled
+
       secretPropertiesFiles:
         /opt/open-xchange/etc/masterpassword-authentication.properties:
           com.openexchange.authentication.masterpassword.password: mastersecret
 
       uiSettings:
+        io.ox/office//module/spellingEnabled: "false"
 
         # Plain strings
         io.ox.public-sector//contactlabels/userfield01: "Department"
