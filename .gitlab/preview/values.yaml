@@ -21,7 +21,7 @@ plugins-ui:
 
 global:
   mysql:
-    host: &mysqlHost "preview-app-mysql"
+    host: &mysqlHost "preview-app-mariadb"
     auth:
       password: &mysqlPassword "secret"
       user: &mysqlUser "openexchange"
@@ -36,6 +36,8 @@ asbox:
     ## MySQL chart configuration
     ##
     mysql:
+      enabled: false
+    mariadb:
       enabled: true
       auth:
         rootPassword: &mysqlRootPassword "secret"
