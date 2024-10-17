@@ -200,6 +200,11 @@ asbox:
       redis:
         hosts:
           - preview-app-redis-master:6379
+      s3:
+        endpoint: http://preview-app-minio:9000
+        auth:
+          user: *minioAccessKey
+          password: *minioSecretKey
 
     istio:
       enabled: true
