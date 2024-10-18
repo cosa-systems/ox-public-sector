@@ -11,13 +11,12 @@ asbox:
 
     core-mw:
       image:
-        pullPolicy: IfNotPresent
+        pullPolicy: Always
         repository: appsuite-core-internal/middleware-public-sector-pro
-        tag: &branchName stable-8.21
+        tag: &branchName main
 
-    extraUIManifestURLs:
-      - http://%%RELEASE-NAME%%-plugins-ui/manifest.json
-      - http://%%RELEASE-NAME%%-${OX_COMPONENT}/manifest.json
+    overridableExtraUIManifestURLs:
+      public-sector-ui: http://%%RELEASE-NAME%%-public-sector-ui/manifest.json
 
     istio:
       ingressGateway:
