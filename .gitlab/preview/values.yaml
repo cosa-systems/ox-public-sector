@@ -9,16 +9,6 @@ public-sector-ui:
   imagePullSecrets:
     - name: gitlab-registry-credentials
 
-plugins-ui:
-  defaultRegistry: registry.gitlab.open-xchange.com
-  image:
-    repository: extensions/plugins-ui
-  imagePullSecrets:
-    - name: gitlab-registry-credentials
-
-  ingress:
-    enabled: false
-
 global:
   mysql:
     host: &mysqlHost "preview-app-mariadb"

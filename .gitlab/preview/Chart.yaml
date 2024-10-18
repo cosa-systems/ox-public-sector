@@ -27,9 +27,6 @@ dependencies:
 - name: asbox
   repository: oci://registry.open-xchange.com/appsuite-core-internal/charts
   version: ">=0.0.1"
-- name: plugins-ui
-  repository: oci://registry.open-xchange.com/appsuite-core-internal/charts
-  version: ">=0.0.1"
 - name: public-sector-ui
   version: ">=0.0.1"
   repository: file://../../helm/public-sector-ui
