@@ -62,6 +62,8 @@ asbox:
         database: "configdb"
         auth:
           rootPassword: *mysqlRootPassword
+          password: *mysqlPassword
+          user: *mysqlUser
 
       redis:
         enabled: true
