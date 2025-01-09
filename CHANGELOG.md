@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- Prepare for base image update
 
 ## [2.3.0] - 2024-02-22
 
