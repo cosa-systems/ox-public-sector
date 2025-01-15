@@ -65,9 +65,11 @@ asbox:
           password: *mysqlPassword
           user: *mysqlUser
 
-      redis:
+      redis: &redisConfiguration
         enabled: true
-        hosts: "preview-app-redis-master:6379"
+        mode: standalone
+        hosts:
+          - "preview-app-redis-master:6379"
 
       masterAdmin: &masterAdmin "oxadminmaster"
       masterPassword: &masterPassword "secret"
@@ -205,14 +207,14 @@ asbox:
     guard-ui:
       enabled: false
     core-ui-middleware:
-      redis:
-        hosts:
-          - preview-app-redis-master:6379
+      redis: *redisConfiguration
       s3:
         endpoint: http://preview-app-minio:9000
         auth:
           user: *minioAccessKey
           password: *minioSecretKey
+      minio:
+        enabled: false
 
     istio:
       enabled: true
