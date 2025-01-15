@@ -38,3 +38,8 @@ asbox:
     drive-client-windows-ox:
       enabled: false
       baseUrl: "http://appsuite-asbox-${NAMESPACE}.${KUBE_INGRESS_BASE_DOMAIN}"
+
+    core-ui:
+      image:
+        repository: appsuite-core-internal/core-ui
+        tag: *branchName
