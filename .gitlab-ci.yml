@@ -14,3 +14,15 @@ build e2e image:
   variables:
     KUBERNETES_MEMORY_REQUEST: 2Gi
     KUBERNETES_MEMORY_LIMIT: 2Gi
+
+remove preview deployment:
+  stage: .pre
+  extends:
+    - .image-k8s
+    - .setup-k8s
+  tags:
+    - kubernetes
+  script:
+    - !reference [.setup-k8s, script]
+    - helm uninstall preview-app -n $NAMESPACE --wait || true
+  retry: 2
