@@ -1,4 +1,4 @@
-FROM registry.gitlab.open-xchange.com/frontend/dev_env/node_builder:latest AS builder
+FROM registry.gitlab.open-xchange.com/appsuite/web-foundation/base-images/node_builder:latest AS builder
 
 WORKDIR /app
 COPY . /app
@@ -11,6 +11,6 @@ RUN apt update && apt install -y bash git jq && rm -rf /var/lib/apt/lists/*
 RUN ["/bin/bash", "ui-docker-files/build.sh"]
 RUN echo "add_header version \"$CI_COMMIT_SHA\";" >> headers.conf
 
-FROM registry.gitlab.open-xchange.com/frontend/dev_env/distroless/nginx:latest
+FROM registry.gitlab.open-xchange.com/appsuite/web-foundation/base-images/distroless/nginx:latest
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY --from=builder /app/headers.conf /etc/nginx/conf.d/headers.conf
