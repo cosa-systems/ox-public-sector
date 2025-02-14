@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [2.4.0] - 2025-02-14
 - INF-494: Replace Docker Base Images
 
 ## [2.3.1] - 2025-01-10
@@ -49,7 +51,8 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1]
 
-[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.3.1...main
+[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.4.0...main
+[2.4.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.3.1...2.4.0
 [2.3.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/middleware-public-sector-pro-8.32.43...2.3.1
 [2.3.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.2.1...2.3.0
 [2.2.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.2.0...2.2.1
