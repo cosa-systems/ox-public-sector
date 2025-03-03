@@ -11,7 +11,7 @@ configurations {
 }
 
 dependencies {
-    toCopy 'com.github.tomakehurst:wiremock-jre8:2.35.0'
+    toCopy 'org.wiremock:wiremock:3.12.0'
 }
 
 task download(type: Copy) {
