@@ -5,6 +5,7 @@ ciPipeline(
     omitBuildPattern: [
         '^open-xchange-appsuite-public-sector'
     ],
+    spectral: false,
     obsCleanUp: false,
     build: false,
     fetch: false,
