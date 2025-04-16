@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- INF-511: Base Image Update
 
 ## [2.4.0] - 2025-02-14
 - INF-494: Replace Docker Base Images
