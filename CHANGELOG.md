@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [2.4.1] - 2025-04-16
 - INF-511: Base Image Update
 
 ## [2.4.0] - 2025-02-14
@@ -52,7 +54,8 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1]
 
-[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.4.0...main
+[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.4.1...main
+[2.4.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/middleware-public-sector-pro-8.36.50...2.4.1
 [2.4.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.3.1...2.4.0
 [2.3.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/middleware-public-sector-pro-8.32.43...2.3.1
 [2.3.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.2.1...2.3.0
