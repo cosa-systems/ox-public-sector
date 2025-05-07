@@ -12,6 +12,7 @@ configurations {
 
 dependencies {
     toCopy 'org.wiremock:wiremock:3.12.0'
+    testImplementation(testFixtures(project(":com.openexchange.core-test")))
 }
 
 task download(type: Copy) {
