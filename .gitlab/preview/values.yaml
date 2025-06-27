@@ -187,6 +187,7 @@ asbox:
     plugins-ui:
       enabled: true
       image:
+        registry: appsuite-core-internal/plugins-ui
         tag: "latest"
     core-documentconverter:
       enabled: false
