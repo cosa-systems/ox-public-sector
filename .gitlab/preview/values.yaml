@@ -210,6 +210,9 @@ asbox:
     guard-ui:
       enabled: false
     core-ui-middleware:
+      image:
+        repository: appsuite-core-internal/core-ui-middleware
+        tag: latest
       redis: *redisConfiguration
       s3:
         endpoint: http://preview-app-minio:9000
