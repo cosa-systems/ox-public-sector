@@ -186,6 +186,8 @@ asbox:
     ################ WEB #################
     plugins-ui:
       enabled: true
+      image:
+        tag: "latest"
     core-documentconverter:
       enabled: false
     core-drive-help:
