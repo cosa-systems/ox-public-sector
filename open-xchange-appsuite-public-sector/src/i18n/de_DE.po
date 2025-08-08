@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "Apply changes"
+msgstr "Änderungen übernehmen"
+
 #: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
 msgid "Copy to clipboard"
 msgstr "In die Zwischenablage kopieren"
@@ -33,6 +37,10 @@ msgstr "Konnte Konferenzraum nicht aktualisieren"
 msgid "Creating conference room..."
 msgstr "Erstelle Konferenzraum..."
 
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "Enable or disable notifications"
+msgstr "Benachrichtigung aktivieren / deaktivieren"
+
 #: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
 msgid "Link:"
 msgstr "Link:"
@@ -43,9 +51,43 @@ msgstr "Link:"
 msgid "Link: %1$s"
 msgstr "Link: %1$s"
 
+#: src/io.ox.public-sector/autonotify/button.js
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+#: src/io.ox.public-sector/autonotify/notifyfilter.js
+#: module:io.ox.public-sector
+msgid "Notify to"
+msgstr "Benachrichtigung an"
+
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "Send a notification of all incoming emails to this address"
+msgstr ""
+"Eine Benachrichtigung über alle eingehenden E-Mails an diese Adresse schicken"
+
+#: src/io.ox.public-sector/autonotify/model.js
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "The notification address is not valid."
+msgstr "Die Benachrichtigungadresse ist ungültig"
+
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "Unable to load mail filter settings."
+msgstr "Die Mailfilter-Einstellungen konnten nicht geladen werden."
+
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "Unable to load your notification settings. Please retry later."
+msgstr ""
+"Die Einstellungen für die Benachrichtigung konnten nicht geladen werden. "
+"Bitte versuchen Sie es später erneut."
+
 #: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
 msgid "Video conference"
 msgstr "Videokonferenz"
+
+#: src/io.ox.public-sector/autonotify/model.js module:io.ox.public-sector
+msgid "notifications"
+msgstr "Benachrichtigungen"
 
 #~ msgid "Copy to description"
 #~ msgstr "In Beschreibung kopieren"

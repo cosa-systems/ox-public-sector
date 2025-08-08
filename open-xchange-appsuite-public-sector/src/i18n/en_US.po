@@ -7,6 +7,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "Apply changes"
+msgstr ""
+
 #: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
 msgid "Copy to clipboard"
 msgstr ""
@@ -31,6 +35,10 @@ msgstr ""
 msgid "Creating conference room..."
 msgstr ""
 
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "Enable or disable notifications"
+msgstr ""
+
 #: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
 msgid "Link:"
 msgstr ""
@@ -41,6 +49,37 @@ msgstr ""
 msgid "Link: %1$s"
 msgstr ""
 
+#: src/io.ox.public-sector/autonotify/button.js
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "Notifications"
+msgstr ""
+
+#: src/io.ox.public-sector/autonotify/notifyfilter.js
+#: module:io.ox.public-sector
+msgid "Notify to"
+msgstr ""
+
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "Send a notification of all incoming emails to this address"
+msgstr ""
+
+#: src/io.ox.public-sector/autonotify/model.js
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "The notification address is not valid."
+msgstr ""
+
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "Unable to load mail filter settings."
+msgstr ""
+
+#: src/io.ox.public-sector/autonotify/view.js module:io.ox.public-sector
+msgid "Unable to load your notification settings. Please retry later."
+msgstr ""
+
 #: src/io.ox.public-sector/element/register.js module:io.ox.public-sector
 msgid "Video conference"
+msgstr ""
+
+#: src/io.ox.public-sector/autonotify/model.js module:io.ox.public-sector
+msgid "notifications"
 msgstr ""

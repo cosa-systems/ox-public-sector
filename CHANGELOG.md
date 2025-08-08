@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- PBSR-1357: Port autonotify plugin to AS8
 
 ## [2.4.1] - 2025-04-16
 - INF-511: Base Image Update

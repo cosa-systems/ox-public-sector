@@ -1,0 +1,22 @@
+.autonotify-dialog {
+
+  &.modal.flex {
+    .modal-header {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .checkbox.switch {
+    margin: 0;
+    display: inline-block;
+  }
+
+  .modal-body.disabled {
+    background-color: var(--background-100);
+  }
+
+  .modal-body .form-group:last-child {
+    margin-bottom: 0;
+  }
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "namespace": ["io.ox/settings"],
+    "requires": "mailfilter_v2 && public-sector-autonotify",
+    "device": "!small",
+    "path": "io.ox.public-sector/autonotify/notifyfilter"
+  },
+  {
+    "namespace": ["io.ox/settings"],
+    "requires": "mailfilter_v2 && public-sector-autonotify",
+    "device": "!small",
+    "path": "io.ox.public-sector/autonotify/button"
+  }
+]
