@@ -52,6 +52,14 @@ asbox:
         rootUser: &minioAccessKey "hob36g"
         rootPassword: &minioSecretKey "6oqns99ilfkh855u"
 
+    mail-stack:
+      dovecot:
+        dovecot:
+          configuration: |-
+            plugin {
+              sieve_notify_mailto_envelope_from = orig_recipient
+            }
+
   appsuite-pro:
     ################ MIDDLEWARE #################
     core-mw:
@@ -103,9 +111,12 @@ asbox:
         com.openexchange.mail.mailServer: &mailServer "preview-app-dovecot"
         com.openexchange.mail.transportServer: "preview-app-postfix"
         com.openexchange.mail.filter.server: *mailServer
+        com.openexchange.mail.filter.blacklist.actions: redirect
+        com.openexchange.mail.filter.options.apply.blockedActions: redirect,notify
         # Capabilities
         com.openexchange.capability.public-sector: "true"
         com.openexchange.capability.public-sector-contactlabels: "true"
+        com.openexchange.capability.public-sector-autonotify: "true"
 
         # Drive
         com.openexchange.drive.events.apn.ios.enabled: "false"

@@ -91,6 +91,16 @@ This will also hide the 'Auto forward' button.
 
 Similarly, adding `notify` to that property will disable the support for notifications and hide the 'Notifications' button.
 
+### Sender Address for Notifications
+
+By default, Dovecot sends notifications from the configured global postmaster account. It might be useful to use the user's address (i.e. the recipient of the mail that triggered the notification) instead:
+
+```
+plugin {
+  sieve_notify_mailto_envelope_from = orig_recipient
+}
+```
+
 ### Disable Apply
 
 The notification rule created by the dialog cannot be applied to existing mails to avoid a flood of notifications. Depending on what kind of user rules with notifications exist, it might also be useful to prevent applying them to existing mails. This can be done with the following property:
