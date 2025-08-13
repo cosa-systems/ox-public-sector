@@ -224,6 +224,7 @@ asbox:
       image:
         repository: appsuite-core-internal/core-ui-middleware
         tag: latest
+        pullPolicy: Always
       redis: *redisConfiguration
       s3:
         endpoint: http://preview-app-minio:9000
