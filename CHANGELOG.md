@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [2.5.1] - 2026-01-23
 - Updated documentation
 
 ## [2.5.0] - 2025-08-08
@@ -58,7 +60,8 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1]
 
-[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.5.0...main
+[unreleased]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.5.1...main
+[2.5.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/middleware-public-sector-pro-8.42.57...2.5.1
 [2.5.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/middleware-public-sector-8.40.62...2.5.0
 [2.4.1]: https://gitlab.open-xchange.com/extensions/public-sector/compare/middleware-public-sector-pro-8.36.50...2.4.1
 [2.4.0]: https://gitlab.open-xchange.com/extensions/public-sector/compare/2.3.1...2.4.0
