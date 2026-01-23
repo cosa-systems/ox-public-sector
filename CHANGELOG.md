@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- Updated documentation
 
 ## [2.5.0] - 2025-08-08
 - PBSR-1357: Port autonotify plugin to AS8
