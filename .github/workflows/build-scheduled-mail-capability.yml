@@ -15,14 +15,22 @@ on:
       base_image:
         description: 'OX middleware base image (full ref incl. tag)'
         required: true
-        default: 'registry.opencode.de/bmi/opendesk/components/supplier/open-xchange/images-mirror/middleware-public-sector:8.48.91'
+        default: 'ghcr.io/cosa-systems/middleware-public-sector-base:8.48.91'
 
 permissions:
   contents: read
   packages: write
 
+# NOTE: GitHub-hosted runners CANNOT pull directly from
+# registry.opencode.de/.../middleware-public-sector — the manifest resolves but
+# blob fetch from its S3 backend (s3b.wx-one.com) dies with a TLS handshake
+# timeout. So the base image is mirrored once per OX version into GHCR (from a
+# network that can reach opencode.de) and consumed from there:
+#   skopeo copy \
+#     docker://registry.opencode.de/bmi/opendesk/components/supplier/open-xchange/images-mirror/middleware-public-sector:8.48.91 \
+#     docker://ghcr.io/cosa-systems/middleware-public-sector-base:8.48.91
 env:
-  BASE_IMAGE: ${{ github.event.inputs.base_image || 'registry.opencode.de/bmi/opendesk/components/supplier/open-xchange/images-mirror/middleware-public-sector:8.48.91' }}
+  BASE_IMAGE: ${{ github.event.inputs.base_image || 'ghcr.io/cosa-systems/middleware-public-sector-base:8.48.91' }}
   IMAGE: ghcr.io/${{ github.repository_owner }}/middleware-public-sector-scheduled-mail
 
 jobs:
