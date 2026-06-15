@@ -26,7 +26,11 @@ RUN set -eux; \
     CP="$(find /opt/open-xchange/bundles -name '*.jar' | tr '\n' ':')"; \
     mkdir -p bin; \
     find src -name '*.java' > sources.txt; \
-    javac --release 21 -classpath "$CP" -d bin @sources.txt; \
+    # -sourcepath src so javac never tries to (implicitly) compile .java
+    # sources shipped inside classpath jars (e.g. joda-time); -implicit:none
+    # belt-and-braces against the same.
+    javac --release 21 -classpath "$CP" -sourcepath src -implicit:none \
+        -d bin @sources.txt; \
     jar --create --file com.openexchange.mail.scheduled.capability.jar \
         --manifest META-INF/MANIFEST.MF -C bin .
 
