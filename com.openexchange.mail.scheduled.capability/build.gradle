@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+repositories {
+    maven {
+        url = uri("https://artifactory.production.cloud.oxoe.io/artifactory/libs-release")
+    }
+}
+
+dependencies {
+    testImplementation(testFixtures(project(":com.openexchange.core-test")))
+}

@@ -1,0 +1,83 @@
+name: Build scheduled_mail capability image
+
+# Builds the middleware-public-sector overlay image that adds the
+# `scheduled_mail` capability bundle ("Send later" composer action) and pushes
+# it to GHCR. See com.openexchange.mail.scheduled.capability/README.md.
+
+on:
+  push:
+    branches: [stable-8.47]
+    paths:
+      - 'com.openexchange.mail.scheduled.capability/**'
+      - '.github/workflows/build-scheduled-mail-capability.yml'
+  workflow_dispatch:
+    inputs:
+      base_image:
+        description: 'OX middleware base image (full ref incl. tag)'
+        required: true
+        default: 'registry.opencode.de/bmi/opendesk/components/supplier/open-xchange/images-mirror/middleware-public-sector:8.48.91'
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  BASE_IMAGE: ${{ github.event.inputs.base_image || 'registry.opencode.de/bmi/opendesk/components/supplier/open-xchange/images-mirror/middleware-public-sector:8.48.91' }}
+  IMAGE: ghcr.io/${{ github.repository_owner }}/middleware-public-sector-scheduled-mail
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # 'true' when the opencode.de registry pull credentials are configured as
+      # repo secrets (needed if the base image is not publicly pullable).
+      # secrets context is only available in job/step env, not top-level.
+      HAS_OPENCODE_CREDS: ${{ secrets.OPENCODE_REGISTRY_USER != '' && secrets.OPENCODE_REGISTRY_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Derive image tag from base image tag
+        id: meta
+        run: echo "tag=${BASE_IMAGE##*:}" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to opencode.de (base image pull)
+        if: env.HAS_OPENCODE_CREDS == 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: registry.opencode.de
+          username: ${{ secrets.OPENCODE_REGISTRY_USER }}
+          password: ${{ secrets.OPENCODE_REGISTRY_TOKEN }}
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: com.openexchange.mail.scheduled.capability
+          file: com.openexchange.mail.scheduled.capability/Dockerfile
+          build-args: |
+            BASE_IMAGE=${{ env.BASE_IMAGE }}
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ steps.meta.outputs.tag }}
+            ${{ env.IMAGE }}:latest
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.description=OpenDesk OX middleware-public-sector + scheduled_mail capability (Send later)
+
+      - name: Summary
+        run: |
+          {
+            echo "### Published"
+            echo ""
+            echo '`'"${IMAGE}:${{ steps.meta.outputs.tag }}"'`'
+            echo ""
+            echo "Repoint the OpenDesk OX middleware image (open-xchange-core-mw-groupware) at this tag."
+          } >> "$GITHUB_STEP_SUMMARY"

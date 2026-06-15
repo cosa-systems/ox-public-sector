@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Declares and grants the scheduled_mail capability so the App Suite "Send later" composer button is exposed
+Bundle-SymbolicName: com.openexchange.mail.scheduled.capability
+Bundle-Version: 8
+Bundle-Activator: com.openexchange.mail.scheduled.capability.osgi.Activator
+Bundle-Vendor: Open-Xchange Software GmbH
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Automatic-Module-Name: com.openexchange.mail.scheduled.capability
+Bundle-ActivationPolicy: lazy
+Import-Package: com.openexchange.capabilities,
+ com.openexchange.config.cascade,
+ com.openexchange.exception,
+ com.openexchange.osgi,
+ com.openexchange.session,
+ org.osgi.framework,
+ org.slf4j
